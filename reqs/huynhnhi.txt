@@ -1,0 +1,2 @@
+# Dependencies for Huynhnhi (Metadata, Sources TeX, Quality & Schemas)
+# Add your custom python packages here:

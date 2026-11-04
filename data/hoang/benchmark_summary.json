@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.2",
+  "is_mock": true,
+  "run_id": "colab-cpu-sample-001",
+  "environment": {
+    "os": "Linux 6.1.85+",
+    "os_version": "Ubuntu 22.04 LTS",
+    "architecture": "x86_64",
+    "processor": "Intel(R) Xeon(R) CPU @ 2.20GHz",
+    "cpu_count": "2",
+    "python_version": "3.10.12",
+    "python_implementation": "CPython",
+    "total_ram_bytes": 13612879872
+  },
+  "cache_mode": "cold",
+  "wall_seconds": 48.72,
+  "discovery_seconds": 3.42,
+  "mean_paper_seconds": 4.53,
+  "min_paper_seconds": 2.85,
+  "max_paper_seconds": 7.12,
+  "total_paper_seconds": 45.3,
+  "peak_ram_bytes": 78643200,
+  "mean_ram_bytes": 52428800,
+  "peak_disk_bytes": 24576000,
+  "final_output_bytes": 18432000,
+  "method": "process_tree_rss (psutil)",
+  "sampling_interval_seconds": 0.1,
+  "exit_code": 0,
+  "stage_timings": {
+    "discovery": 3.42,
+    "metadata": 8.75,
+    "sources": 21.4,
+    "references": 15.15
+  }
+}

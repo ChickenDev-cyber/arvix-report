@@ -1,0 +1,56 @@
+# ==============================================================================
+# CODEOWNERS — Phân công quyền sở hữu file và gán reviewer tự động
+# Quy tắc: Mỗi file chỉ có MỘT người được sửa.
+# ==============================================================================
+
+# Global owner / Hạ tầng dùng chung (Hoàng)
+* @huynhhuyhoang2006@gmail.com
+
+# ------------------------------------------------------------------------------
+# 1. Các file hạ tầng dùng chung do Hoàng quản lý
+# ------------------------------------------------------------------------------
+myst.yml @huynhhuyhoang2006@gmail.com
+requirements.txt @huynhhuyhoang2006@gmail.com
+.github/ @huynhhuyhoang2006@gmail.com
+CODEOWNERS @huynhhuyhoang2006@gmail.com
+book/index.md @huynhhuyhoang2006@gmail.com
+book/lib/common.py @huynhhuyhoang2006@gmail.com
+
+# File riêng của Hoàng
+reqs/hoang.txt @huynhhuyhoang2006@gmail.com
+scripts/prepare_hoang.py @huynhhuyhoang2006@gmail.com
+data/hoang/ @huynhhuyhoang2006@gmail.com
+book/lib/hoang_* @huynhhuyhoang2006@gmail.com
+book/01-crawling/06-thong-ke.md @huynhhuyhoang2006@gmail.com
+book/01-crawling/08-benchmark.md @huynhhuyhoang2006@gmail.com
+book/02-parsing/03-thong-ke.md @huynhhuyhoang2006@gmail.com
+book/02-parsing/04-benchmark.md @huynhhuyhoang2006@gmail.com
+
+# ------------------------------------------------------------------------------
+# 2. File riêng của Mẫn Nhi
+# ------------------------------------------------------------------------------
+reqs/mannhi.txt @NhiNgo49
+README.md @NhiNgo49
+scripts/prepare_mannhi.py @NhiNgo49
+data/mannhi/ @NhiNgo49
+book/lib/mannhi_* @NhiNgo49
+book/01-crawling/index.md @NhiNgo49
+book/01-crawling/01-tong-quan.md @NhiNgo49
+book/01-crawling/02-discovery.md @NhiNgo49
+book/01-crawling/05-references.md @NhiNgo49
+book/01-crawling/09-han-che.md @NhiNgo49
+book/02-parsing/01-phan-cap.md @NhiNgo49
+
+# ------------------------------------------------------------------------------
+# 3. File riêng của Huỳnh Nhi
+# ------------------------------------------------------------------------------
+reqs/huynhnhi.txt @TrinhNhi3011
+scripts/prepare_huynhnhi.py @TrinhNhi3011
+data/huynhnhi/ @TrinhNhi3011
+book/lib/huynhnhi_* @TrinhNhi3011
+book/01-crawling/03-metadata.md @TrinhNhi3011
+book/01-crawling/04-nguon-tex.md @TrinhNhi3011
+book/01-crawling/07-chat-luong.md @TrinhNhi3011
+book/02-parsing/index.md @TrinhNhi3011
+book/02-parsing/02-chuan-hoa.md @TrinhNhi3011
+book/02-parsing/05-bang-du-lieu.md @TrinhNhi3011

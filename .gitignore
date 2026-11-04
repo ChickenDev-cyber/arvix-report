@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+/lib/
 lib64/
 parts/
 sdist/
@@ -218,3 +218,20 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+
+# Jupyter Book / MyST build outputs
+_build/
+.myst/
+
+# Strict: Do not commit raw corpus data
+*.tar.gz
+*.gz
+*.pdf
+raw_references.json
+
+!book/lib/
+!book/lib/*.py
+
+**/__pycache__/**
+*.pyc

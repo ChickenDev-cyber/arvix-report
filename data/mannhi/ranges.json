@@ -1,3 +1,8 @@
 [
-  {"range": "2301.00001 - 2301.00100", "expected": 100}
+  {
+    "owner": "man-nhi",
+    "start": "2501.12642",
+    "end": "2501.17641",
+    "inclusive": true
+  }
 ]

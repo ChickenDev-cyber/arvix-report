@@ -38,7 +38,7 @@ jobs:
 
       - name: Build Jupyter Book HTML
         env:
-          BASE_URL: /arvix-report/
+          BASE_URL: /arvix-report
         run: |
           python -m jupyter_book build --html
 

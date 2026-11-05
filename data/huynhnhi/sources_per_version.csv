@@ -1,0 +1,11 @@
+run_id,owner,arxiv_id,version,status,source_kind,download_bytes,extracted_bytes_before_filter,retained_source_bytes,removed_figure_bytes,removed_other_bytes,invariant_ok,n_files,n_tex,n_bib,error_code,is_mock
+mock-demo,khang,2506.20788,1,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,khang,2506.20788,2,unsupported,pdf_only,,,0,,,,0,0,0,,True
+mock-demo,trong,2504.17523,1,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,trong,2504.17523,2,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,hoang,2503.06914,1,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,hoang,2503.06914,2,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,man-nhi,2501.12642,1,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,man-nhi,2501.12642,2,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,huynh-nhi,2409.03594,1,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True
+mock-demo,huynh-nhi,2409.03594,2,success,tar_gzip,382,311,267,44,0,True,2,1,1,,True

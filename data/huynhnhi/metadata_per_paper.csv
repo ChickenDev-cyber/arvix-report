@@ -1,0 +1,6 @@
+run_id,owner,arxiv_id,status,version_count,versions_complete,date_order_issue,has_venue,missing_fields,error_code,is_mock
+mock-demo,khang,2506.20788,success,2,True,False,False,,,True
+mock-demo,trong,2504.17523,success,2,True,False,False,,,True
+mock-demo,hoang,2503.06914,success,2,True,False,False,,,True
+mock-demo,man-nhi,2501.12642,success,2,True,False,False,,,True
+mock-demo,huynh-nhi,2409.03594,success,2,True,False,False,,,True

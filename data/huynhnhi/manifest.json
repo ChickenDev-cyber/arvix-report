@@ -1,0 +1,24 @@
+{
+  "is_mock": true,
+  "runs": [
+    {
+      "run_id": "mock-demo",
+      "is_mock": true,
+      "paper_count": 5,
+      "discovery_complete": false,
+      "accepted_by_step": {
+        "metadata": 5,
+        "sources": 10,
+        "references": 5,
+        "discovery": 5
+      }
+    }
+  ],
+  "rows": {
+    "metadata_per_paper.csv": 5,
+    "sources_per_version.csv": 10,
+    "quality_issues.csv": 0,
+    "papers_sample.csv": 5,
+    "references_sample.csv": 4
+  }
+}

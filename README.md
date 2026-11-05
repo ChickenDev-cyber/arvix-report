@@ -82,6 +82,18 @@ python scripts/prepare_hoang.py
 python scripts/prepare_mannhi.py
 python scripts/prepare_huynhnhi.py
 ```
+### 2.1. Mẫn Nhi — Discovery và References
+
+Script `scripts/prepare_mannhi.py` cần tìm được repo `arxiv-data-science`, vì `ASSIGNED_RANGES` được khai báo trong `src/arxiv_pipeline/config.py` của repo mã nguồn, không nằm trong repo báo cáo.
+
+Các file được sinh trong `data/mannhi/`:
+
+- `ranges.json`: dải ID lấy trực tiếp từ `ASSIGNED_RANGES` của source repo.
+- `discovery.csv`: các kết quả Discovery thuộc owner Mẫn Nhi.
+- `references_per_paper.csv`: số lượng references theo từng bài.
+- `manifest.json`: nguồn dữ liệu, run được đọc, số dòng và cờ `is_mock`.
+
+Nếu chưa có dữ liệu của Mẫn Nhi, CSV có thể chỉ có dòng header. Đây không phải lỗi import. Không tự điền số liệu mẫu vào kết quả thực nghiệm. Luôn kiểm tra `is_mock` trong manifest trước khi đưa số liệu vào báo cáo; dữ liệu mock chỉ dùng kiểm tra luồng xử lý và biểu đồ.
 
 ### Bước 3: Biên dịch sách sang HTML
 ```bash
@@ -89,3 +101,35 @@ python -m jupyter_book build --html
 ```
 
 Kết quả tĩnh sẽ được tạo tại thư mục `_build/html/`. Bạn có thể mở tệp `_build/html/index.html` trên trình duyệt để kiểm tra giao diện trước khi commit.
+
+### Bước 4: Chạy local server để xem sách
+
+Mở một Terminal mới tại thư mục gốc của project và chạy:
+
+```bash
+py -m http.server 3000 --directory _build/html
+```
+
+Sau đó truy cập địa chỉ:
+
+```text
+http://localhost:3000
+```
+
+**Lưu ý:**
+- Giữ Terminal đang chạy server mở trong suốt quá trình xem sách.
+- Nhấn `Ctrl + C` để dừng server.
+- Khi có thay đổi nội dung Markdown hoặc dữ liệu, cần build lại sách trước khi xem phiên bản mới.
+- Không cần chạy lại các script chuẩn bị dữ liệu nếu dữ liệu không thay đổi.
+
+## 4. Quy trình Git đề xuất
+
+```bash
+git status
+git switch <branch-cua-ban>
+git add <cac-file-thuoc-phan-viec>
+git commit -m "docs: update report content"
+git push -u origin <branch-cua-ban>
+```
+
+Sau khi push, tạo Pull Request vào `main` để nhóm review. GitHub Actions trong `.github/workflows/deploy.yml` sẽ build và deploy theo cấu hình của repo khi thay đổi được merge/push vào branch được workflow quy định.

@@ -1,0 +1,26 @@
+{
+  "source_repository": "D:\\Kì 5 (2026-2027)\\Nhập môn KHDL\\arxiv-data-science",
+  "selected_run_id": null,
+  "is_mock": true,
+  "runs": [
+    {
+      "run_id": "baseline-001",
+      "is_mock": true,
+      "accepted_result_records": 4,
+      "mannhi_records": 1,
+      "discovery_rows": 0,
+      "reference_rows": 1
+    },
+    {
+      "run_id": "test-mock-001",
+      "is_mock": true,
+      "accepted_result_records": 3,
+      "mannhi_records": 0,
+      "discovery_rows": 0,
+      "reference_rows": 0
+    }
+  ],
+  "discovery_rows": 0,
+  "reference_rows": 1,
+  "note": "Kiểm tra is_mock trước khi sử dụng số liệu làm kết quả thực nghiệm."
+}

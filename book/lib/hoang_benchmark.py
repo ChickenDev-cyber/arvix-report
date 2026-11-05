@@ -96,7 +96,13 @@ def generate_stage_timing_chart(output_path: str | Path) -> str:
 
     for bar in bars:
         w = bar.get_width()
-        ax.text(w + 0.5, bar.get_y() + bar.get_height()/2, f"{w:.2f}s", va="center", ha="left", fontsize=9, fontweight="bold")
+        if w >= 3600:
+            txt = f"{w:,.1f}s ({w/3600:.1f}h)"
+        elif w >= 60:
+            txt = f"{w:,.1f}s ({w/60:.1f}m)"
+        else:
+            txt = f"{w:.2f}s"
+        ax.text(w + max(times)*0.01, bar.get_y() + bar.get_height()/2, txt, va="center", ha="left", fontsize=8.5, fontweight="bold")
 
     ax.set_title("Phân bố Thời gian Thực thi Theo Công đoạn Pipeline (Colab CPU)", fontsize=11, fontweight="bold", pad=12)
     ax.set_xlabel("Thời gian (giây)", fontsize=10)

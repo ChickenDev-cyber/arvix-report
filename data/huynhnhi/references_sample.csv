@@ -1,5 +1,6 @@
 arxiv_id,ref_arxiv_id,ref_title,ref_authors,ref_submission_date,ref_s2_id
-2506.20788,2001.00001,SYNTHETIC reference,"[""Example Author""]",2020-01-01,SYNTHETIC-S2-ID
-2504.17523,2001.00001,SYNTHETIC reference,"[""Example Author""]",2020-01-01,SYNTHETIC-S2-ID
-2501.12642,2001.00001,SYNTHETIC reference,"[""Example Author""]",2020-01-01,SYNTHETIC-S2-ID
-2409.03594,2001.00001,SYNTHETIC reference,"[""Example Author""]",2020-01-01,SYNTHETIC-S2-ID
+2409.03594,1604.03655,A Discrete and Bounded Envy-Free Cake Cutting Protocol for Any Number of Agents,"[""H. Aziz"", ""Simon Mackenzie""]",2016-04-13T05:06:29Z,f1f2731b7df3a807e002252fa8a2db145c16c366
+2409.03594,1705.10239,Fair Division of a Graph,"[""S. Bouveret"", ""K. Cechlárová"", ""Edith Elkind"", ""Ayumi Igarashi"", ""Dominik Peters""]",2017-05-29T15:13:58Z,3f87b15920e0cdb053ad7c937e8283a24b2726f5
+2409.03594,1707.00345,Fairly Allocating Contiguous Blocks of Indivisible Items,"[""Warut Suksompong""]",2017-07-02T20:09:59Z,c50b72aa25dfa3a0bcaeaabb999dfdead4728782
+2409.03594,1707.04769,Almost Envy-Freeness with General Valuations,"[""Benjamin Plaut"", ""Tim Roughgarden""]",2017-07-15T17:47:32Z,44d88fdc624ab2fab821885462505dfd5a7fb7fa
+2409.03594,1808.09406,Almost Envy-Free Allocations with Connected Bundles,"[""V. Bilò"", ""I. Caragiannis"", ""M. Flammini"", ""Ayumi Igarashi"", ""G. Monaco"", ""Dominik Peters"", ""Cosimo Vinci"", ""W. Zwicker""]",2018-08-28T16:57:17Z,4e6a7892548c34eb14221a6e90a10b00899bcbbe

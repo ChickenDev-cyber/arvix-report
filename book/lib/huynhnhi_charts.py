@@ -27,10 +27,29 @@ def manifest() -> dict:
     return json.loads((DATA / "manifest.json").read_text(encoding="utf-8"))
 
 
+def scope_papers() -> int:
+    """Tổng số bài trong scope của các run đã đọc."""
+    return sum(r["paper_count"] for r in manifest()["runs"])
+
+
 def mock_banner() -> str:
-    """Dòng cảnh báo hiện trên trang khi dữ liệu là mock."""
-    return ("**Dữ liệu mẫu (is_mock = true): số liệu chỉ để kiểm tra luồng build.**"
-            if manifest()["is_mock"] else "")
+    """Dòng ghi phạm vi dữ liệu ở đầu trang.
+
+    Mock: cảnh báo số liệu giả. Thật: ghi rõ mốc (run + bản chụp resume) và tiến độ
+    từng bước, vì crawl có thể chưa xong ("cào tới đâu thống kê tới đó").
+    """
+    m = manifest()
+    if m["is_mock"]:
+        return "**Dữ liệu mẫu (is_mock = true): số liệu chỉ để kiểm tra luồng build.**"
+    runs = m["runs"]
+    papers = sum(r["paper_count"] for r in runs)
+    step = {k: sum(r["accepted_by_step"].get(k, 0) for r in runs)
+            for k in ("metadata", "sources", "references")}
+    snaps = ", ".join(f"`{r.get('snapshot', r['run_id'])}`" for r in runs)
+    return (f"**Phạm vi dữ liệu:** dữ liệu crawl thật, mốc {snaps}. "
+            f"Scope gồm {papers} bài; đã chấp nhận metadata của {step['metadata']} bài, "
+            f"nguồn TeX của {step['sources']} phiên bản và references của {step['references']} bài. "
+            f"Crawl chưa hoàn tất nên số liệu chỉ phản ánh phần đã thu tại mốc này.")
 
 
 # ------------------------------------------------------------------ mục 1.3
@@ -91,7 +110,8 @@ def removed_bytes_table(src: pd.DataFrame) -> pd.DataFrame:
             ("loại khác", ok["removed_other_bytes"].sum())]
     t = pd.DataFrame(rows, columns=["phần", "bytes"])
     t["tỷ lệ (%)"] = (t["bytes"] / total * 100).round(2) if total else 0
-    return t
+    t["GiB"] = (t["bytes"] / 1024 ** 3).round(2)  # dễ đọc hơn số byte dạng 1.5e+11
+    return t[["phần", "GiB", "tỷ lệ (%)"]]
 
 
 # ------------------------------------------------------------------ mục 1.7

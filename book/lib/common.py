@@ -122,31 +122,64 @@ def get_mock_benchmark() -> Dict[str, Any]:
     }
 
 
-def load_accepted_results(filepath: Optional[str | Path] = None) -> List[Dict[str, Any]]:
-    """Đọc accepted_results.jsonl, nếu không có hoặc rỗng sẽ fallback về mock data."""
-    if filepath and Path(filepath).exists():
+def load_accepted_results(filepath: Optional[str | Path | List[str | Path]] = None) -> List[Dict[str, Any]]:
+    """
+    Đọc accepted_results.jsonl từ một file, một thư mục (tìm tất cả file jsonl)
+    hoặc danh sách các file/thư mục. Nếu không có hoặc rỗng sẽ fallback về mock data.
+    """
+    if filepath:
+        paths: List[Path] = []
+        if isinstance(filepath, (list, tuple)):
+            for p in filepath:
+                p = Path(p)
+                if p.is_dir():
+                    paths.extend(p.glob("**/accepted_results.jsonl"))
+                elif p.exists():
+                    paths.append(p)
+        else:
+            p = Path(filepath)
+            if p.is_dir():
+                paths.extend(p.glob("**/accepted_results.jsonl"))
+            elif p.exists():
+                paths.append(p)
+
         results = []
-        with open(filepath, "r", encoding="utf-8") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    results.append(json.loads(line))
+        for fpath in paths:
+            with open(fpath, "r", encoding="utf-8") as f:
+                for line in f:
+                    line = line.strip()
+                    if line:
+                        results.append(json.loads(line))
         if results:
             return results
+
     return get_mock_accepted_results()
 
 
-def load_benchmark(filepath: Optional[str | Path] = None) -> Dict[str, Any]:
-    """Đọc file benchmark JSON, nếu không có thì trả về mock data."""
+def load_benchmark(filepath: Optional[str | Path] = None, timing_path: Optional[str | Path] = None) -> Dict[str, Any]:
+    """Đọc file benchmark JSON và timing JSON (nếu có), nếu không có thì trả về mock data."""
     if filepath and Path(filepath).exists():
         with open(filepath, "r", encoding="utf-8") as f:
-            return json.load(f)
+            bench = json.load(f)
+        
+        # Bổ sung thông tin từ timing.json nếu có
+        if timing_path and Path(timing_path).exists():
+            with open(timing_path, "r", encoding="utf-8") as f:
+                t = json.load(f)
+                bench["mean_paper_seconds"] = t.get("mean_paper_seconds")
+                bench["min_paper_seconds"] = t.get("min_paper_seconds")
+                bench["max_paper_seconds"] = t.get("max_paper_seconds")
+                bench["total_paper_seconds"] = t.get("total_paper_seconds")
+                if "wall_seconds" in t and "wall_seconds" not in bench:
+                    bench["wall_seconds"] = t.get("wall_seconds")
+        return bench
     return get_mock_benchmark()
 
 
 def compute_m1_statistics(records: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Tính toán 5 chỉ số bắt buộc theo yêu cầu Milestone 1.
+    Tương thích cả dữ liệu mock lẫn dữ liệu thật Schema 1.2.
     Đặc biệt tuân thủ Lưu ý 1 & 2 mục 4:
       - Kích thước tính trung bình THEO MỖI BÀI (cộng dồn các version của bài).
       - Thể hiện cả s2_reference_count và arxiv_reference_count.
@@ -163,7 +196,7 @@ def compute_m1_statistics(records: List[Dict[str, Any]]) -> Dict[str, Any]:
             papers[aid] = {
                 "arxiv_id": aid,
                 "owner": r.get("owner", "unknown"),
-                "has_discovery": False,
+                "has_discovery": True,
                 "has_metadata": False,
                 "has_sources": False,
                 "has_references": False,
@@ -174,25 +207,33 @@ def compute_m1_statistics(records: List[Dict[str, Any]]) -> Dict[str, Any]:
                 "complete_ref_count": 0,
             }
 
-        ttype = r.get("task_type")
-        if ttype == "discovery" and r.get("status") == "success":
+        step = r.get("step") or r.get("task_type")
+        status = r.get("status")
+        m = r.get("metrics") or {}
+
+        if step == "discovery" and status == "success":
             papers[aid]["has_discovery"] = True
-        elif ttype == "metadata" and r.get("status") == "success":
+        elif step == "metadata" and status in ("success", "partial"):
             papers[aid]["has_metadata"] = True
-        elif ttype == "sources" and r.get("status") == "success":
+        elif step == "sources" and status == "success":
             papers[aid]["has_sources"] = True
-            papers[aid]["extracted_bytes"] += r.get("extracted_bytes_before_filter", 0)
-            papers[aid]["retained_bytes"] += r.get("retained_source_bytes", 0)
-        elif ttype == "references" and r.get("status") == "success":
+            eb = m.get("extracted_bytes_before_filter") if "extracted_bytes_before_filter" in m else r.get("extracted_bytes_before_filter", 0)
+            rb = m.get("retained_source_bytes") if "retained_source_bytes" in m else r.get("retained_source_bytes", 0)
+            papers[aid]["extracted_bytes"] += (eb or 0)
+            papers[aid]["retained_bytes"] += (rb or 0)
+        elif step == "references" and status in ("success", "partial", "empty"):
             papers[aid]["has_references"] = True
-            papers[aid]["s2_ref_count"] += r.get("s2_reference_count", 0)
-            papers[aid]["arxiv_ref_count"] += r.get("arxiv_reference_count", 0)
-            papers[aid]["complete_ref_count"] += r.get("complete_reference_count", 0)
+            s2_cnt = m.get("s2_reference_count") if "s2_reference_count" in m else r.get("s2_reference_count", 0)
+            arxiv_cnt = m.get("arxiv_reference_count") if "arxiv_reference_count" in m else r.get("arxiv_reference_count", 0)
+            comp_cnt = m.get("complete_reference_count") if "complete_reference_count" in m else r.get("complete_reference_count", 0)
+            papers[aid]["s2_ref_count"] += (s2_cnt or 0)
+            papers[aid]["arxiv_ref_count"] += (arxiv_cnt or 0)
+            papers[aid]["complete_ref_count"] += (comp_cnt or 0)
 
     total_papers = len(papers)
     complete_papers = [
         p for p in papers.values()
-        if p["has_discovery"] and p["has_metadata"] and p["has_sources"] and p["has_references"]
+        if p["has_discovery"] and p["has_metadata"] and p["has_sources"]
     ]
     papers_complete_count = len(complete_papers)
     paper_success_rate = (papers_complete_count / total_papers * 100.0) if total_papers > 0 else 0.0
@@ -214,6 +255,50 @@ def compute_m1_statistics(records: List[Dict[str, Any]]) -> Dict[str, Any]:
     total_complete_refs = sum(p["complete_ref_count"] for p in ref_papers)
     ref_metadata_success_rate = (total_complete_refs / total_arxiv_refs * 100.0) if total_arxiv_refs > 0 else 100.0
 
+    # Phân rã theo owner
+    by_owner: Dict[str, Dict[str, Any]] = {}
+    for p in papers.values():
+        ow = p["owner"]
+        if ow not in by_owner:
+            by_owner[ow] = {
+                "owner": ow,
+                "total_papers": 0,
+                "complete_papers": 0,
+                "extracted_bytes": 0,
+                "retained_bytes": 0,
+                "n_sources": 0,
+                "arxiv_refs": 0,
+                "s2_refs": 0,
+                "n_refs": 0,
+            }
+        by_owner[ow]["total_papers"] += 1
+        if p["has_metadata"] and p["has_sources"]:
+            by_owner[ow]["complete_papers"] += 1
+        if p["has_sources"]:
+            by_owner[ow]["extracted_bytes"] += p["extracted_bytes"]
+            by_owner[ow]["retained_bytes"] += p["retained_bytes"]
+            by_owner[ow]["n_sources"] += 1
+        if p["has_references"]:
+            by_owner[ow]["arxiv_refs"] += p["arxiv_ref_count"]
+            by_owner[ow]["s2_refs"] += p["s2_ref_count"]
+            by_owner[ow]["n_refs"] += 1
+
+    owner_summary = []
+    for ow, d in sorted(by_owner.items()):
+        succ_rate = (d["complete_papers"] / d["total_papers"] * 100.0) if d["total_papers"] > 0 else 0.0
+        avg_ret_kb = (d["retained_bytes"] / d["n_sources"] / 1024.0) if d["n_sources"] > 0 else 0.0
+        avg_ext_kb = (d["extracted_bytes"] / d["n_sources"] / 1024.0) if d["n_sources"] > 0 else 0.0
+        avg_refs = (d["arxiv_refs"] / d["n_refs"]) if d["n_refs"] > 0 else 0.0
+        owner_summary.append({
+            "owner": ow,
+            "total_papers": d["total_papers"],
+            "complete_papers": d["complete_papers"],
+            "success_rate": succ_rate,
+            "mean_extracted_kb": avg_ext_kb,
+            "mean_retained_kb": avg_ret_kb,
+            "mean_arxiv_refs": avg_refs,
+        })
+
     return {
         "is_mock": is_mock,
         "total_papers_discovered": total_papers,
@@ -226,5 +311,6 @@ def compute_m1_statistics(records: List[Dict[str, Any]]) -> Dict[str, Any]:
         "total_s2_references": total_s2_refs,
         "total_arxiv_references": total_arxiv_refs,
         "reference_metadata_success_rate": ref_metadata_success_rate,
+        "owner_summary": owner_summary,
         "papers_list": list(papers.values()),
     }

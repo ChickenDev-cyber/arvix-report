@@ -63,28 +63,77 @@ def render_m1_summary_table_md() -> str:
 def generate_size_comparison_chart(output_path: str | Path) -> str:
     """Sinh biểu đồ cột so sánh kích thước trước và sau khi lọc hình ảnh."""
     stats = get_stats_data()
-    papers = stats.get("papers_list", [])
-    if not papers:
-        return ""
-
-    df = pd.DataFrame(papers)
-    df["before_kb"] = df["extracted_bytes"] / 1024.0
-    df["retained_kb"] = df["retained_bytes"] / 1024.0
+    owner_summary = stats.get("owner_summary", [])
 
     fig, ax = plt.subplots(figsize=(9, 4.5), dpi=150)
-    x = range(len(df))
-    width = 0.38
 
-    ax.bar([i - width/2 for i in x], df["before_kb"], width=width, label="Trước lọc (Full TeX + Figures)", color="#e06666", edgecolor="#333", alpha=0.9)
-    ax.bar([i + width/2 for i in x], df["retained_kb"], width=width, label="Sau lọc (Chỉ giữ TeX & BibTeX)", color="#6aa84f", edgecolor="#333", alpha=0.9)
+    if owner_summary and len(owner_summary) > 1:
+        # Dữ liệu thật: vẽ so sánh theo từng Owner và Toàn nhóm
+        names = []
+        before_kb = []
+        after_kb = []
+        
+        display_names = {
+            "hoang": "Hoàng",
+            "huynh-nhi": "Huỳnh Nhi",
+            "huynhnhi": "Huỳnh Nhi",
+            "khang": "Khang",
+            "man-nhi": "Mẫn Nhi",
+            "mannhi": "Mẫn Nhi",
+            "trong": "Trọng",
+        }
+        
+        for o in owner_summary:
+            names.append(display_names.get(o["owner"].lower(), o["owner"]))
+            before_kb.append(o["mean_extracted_kb"])
+            after_kb.append(o["mean_retained_kb"])
 
-    ax.set_title("So sánh Kích thước Trung bình Mỗi Bài Trước & Sau Lọc Hình Ảnh", fontsize=12, fontweight="bold", pad=12)
-    ax.set_xlabel("Mã bài báo (arXiv ID)", fontsize=10)
-    ax.set_ylabel("Dung lượng (KB)", fontsize=10)
-    ax.set_xticks(x)
-    ax.set_xticklabels(df["arxiv_id"], rotation=45, ha="right", fontsize=9)
-    ax.legend(frameon=True)
-    ax.grid(axis="y", linestyle="--", alpha=0.5)
+        # Thêm cột toàn nhóm
+        names.append("Toàn nhóm (TB)")
+        before_kb.append(stats["mean_extracted_bytes_per_paper"] / 1024.0)
+        after_kb.append(stats["mean_retained_bytes_per_paper"] / 1024.0)
+
+        x = range(len(names))
+        width = 0.36
+
+        rects1 = ax.bar([i - width/2 for i in x], before_kb, width=width, label="Trước lọc (Full TeX + Figures)", color="#e06666", edgecolor="#333", alpha=0.9)
+        rects2 = ax.bar([i + width/2 for i in x], after_kb, width=width, label="Sau lọc (Chỉ giữ TeX & BibTeX)", color="#6aa84f", edgecolor="#333", alpha=0.9)
+
+        # Hiển thị tỷ lệ giảm trên đầu cột
+        for i in x:
+            b = before_kb[i]
+            a = after_kb[i]
+            if b > 0:
+                pct = (1.0 - a / b) * 100.0
+                ax.text(i, max(b, a) * 1.03, f"-{pct:.1f}%", ha="center", va="bottom", fontsize=8, fontweight="bold", color="#274e13")
+
+        ax.set_title("Kích Thước Nguồn Trung Bình Mỗi Bài Trước & Sau Lọc Hình Ảnh (Theo Owner)", fontsize=11, fontweight="bold", pad=12)
+        ax.set_xlabel("Người phụ trách dải (Owner)", fontsize=10)
+        ax.set_ylabel("Dung lượng trung bình (KB / bài)", fontsize=10)
+        ax.set_xticks(x)
+        ax.set_xticklabels(names, fontsize=9)
+        ax.legend(frameon=True, loc="upper right")
+        ax.grid(axis="y", linestyle="--", alpha=0.5)
+
+    else:
+        # Fallback dữ liệu mock
+        papers = stats.get("papers_list", [])
+        if not papers:
+            return ""
+        df = pd.DataFrame(papers)
+        df["before_kb"] = df["extracted_bytes"] / 1024.0
+        df["retained_kb"] = df["retained_bytes"] / 1024.0
+        x = range(len(df))
+        width = 0.38
+        ax.bar([i - width/2 for i in x], df["before_kb"], width=width, label="Trước lọc (Full TeX + Figures)", color="#e06666", edgecolor="#333", alpha=0.9)
+        ax.bar([i + width/2 for i in x], df["retained_kb"], width=width, label="Sau lọc (Chỉ giữ TeX & BibTeX)", color="#6aa84f", edgecolor="#333", alpha=0.9)
+        ax.set_title("So sánh Kích thước Trung bình Mỗi Bài Trước & Sau Lọc Hình Ảnh", fontsize=11, fontweight="bold", pad=12)
+        ax.set_xlabel("Mã bài báo (arXiv ID)", fontsize=10)
+        ax.set_ylabel("Dung lượng (KB)", fontsize=10)
+        ax.set_xticks(x)
+        ax.set_xticklabels(df["arxiv_id"], rotation=45, ha="right", fontsize=9)
+        ax.legend(frameon=True)
+        ax.grid(axis="y", linestyle="--", alpha=0.5)
 
     plt.tight_layout()
     output_path = Path(output_path)

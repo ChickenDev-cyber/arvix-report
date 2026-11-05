@@ -1,24 +1,77 @@
 {
-  "is_mock": true,
+  "is_mock": false,
   "runs": [
     {
-      "run_id": "mock-demo",
-      "is_mock": true,
-      "paper_count": 5,
-      "discovery_complete": false,
+      "run_id": "m1-colab-hoang-01",
+      "is_mock": false,
+      "snapshot": "m1-colab-hoang-01-resume-22",
+      "paper_count": 5000,
+      "discovery_complete": true,
       "accepted_by_step": {
-        "metadata": 5,
-        "sources": 10,
-        "references": 5,
-        "discovery": 5
+        "metadata": 4194,
+        "sources": 6494,
+        "references": 0,
+        "discovery": 1
+      }
+    },
+    {
+      "run_id": "m1-colab-huynh-nhi-01",
+      "is_mock": false,
+      "snapshot": "m1-colab-huynh-nhi-01-resume-30",
+      "paper_count": 5000,
+      "discovery_complete": true,
+      "accepted_by_step": {
+        "metadata": 4958,
+        "sources": 7833,
+        "references": 2236,
+        "discovery": 1
+      }
+    },
+    {
+      "run_id": "m1-colab-khang-01",
+      "is_mock": false,
+      "snapshot": "m1-colab-khang-01-resume-24",
+      "paper_count": 5000,
+      "discovery_complete": true,
+      "accepted_by_step": {
+        "metadata": 4817,
+        "sources": 6778,
+        "references": 0,
+        "discovery": 1
+      }
+    },
+    {
+      "run_id": "m1-colab-man-nhi-01",
+      "is_mock": false,
+      "snapshot": "m1-colab-man-nhi-01-resume-31",
+      "paper_count": 5000,
+      "discovery_complete": true,
+      "accepted_by_step": {
+        "metadata": 5000,
+        "sources": 7840,
+        "references": 2196,
+        "discovery": 1
+      }
+    },
+    {
+      "run_id": "m1-colab-trong-01",
+      "is_mock": false,
+      "snapshot": "m1-colab-trong-01-resume-40",
+      "paper_count": 5000,
+      "discovery_complete": true,
+      "accepted_by_step": {
+        "metadata": 5000,
+        "sources": 7679,
+        "references": 210,
+        "discovery": 1
       }
     }
   ],
   "rows": {
-    "metadata_per_paper.csv": 5,
-    "sources_per_version.csv": 10,
-    "quality_issues.csv": 0,
+    "metadata_per_paper.csv": 23969,
+    "sources_per_version.csv": 36624,
+    "quality_issues.csv": 26530,
     "papers_sample.csv": 5,
-    "references_sample.csv": 4
+    "references_sample.csv": 5
   }
 }

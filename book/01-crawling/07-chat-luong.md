@@ -20,22 +20,21 @@ from book.lib import huynhnhi_charts as h
 
 ```{code-cell} python
 :tags: [remove-input]
-from IPython.display import Markdown
 issues = h.load("quality_issues.csv")
 runs = h.manifest()["runs"]
 n_runs = len(runs)
 n_validation = int((issues["report"] == "validation").sum())
 n_quality = int((issues["report"] == "quality").sum())
 n_quality_papers = issues.loc[issues["report"] == "quality", "arxiv_id"].dropna().astype(str).str.strip().replace("", float("nan")).dropna().nunique()
-validation_state = "hợp lệ" if n_validation == 0 else "chưa hợp lệ"
-quality_state = "đã đầy đủ" if n_quality == 0 else "chưa đầy đủ"
 # Đổi số numpy sang số Python để {eval} hiển thị gọn (50.0 thay vì np.float64(50.0))
 import numpy as np
 for _k, _v in list(globals().items()):
     if isinstance(_v, np.generic):
         globals()[_k] = _v.item()
-Markdown(h.mock_banner())
 ```
+
+> [!NOTE]
+> Số liệu trong mục này lấy từ dữ liệu crawl thật của cả nhóm tại mốc ngày 05/11/2026. Lúc đó quá trình crawl chưa hoàn tất, nên các con số chỉ phản ánh phần dữ liệu đã thu được đến mốc này.
 
 Mục này trả lời hai câu hỏi về dữ liệu thu được ở Milestone 1: dữ liệu có **đúng cấu trúc** không, và dữ liệu đã **đủ** chưa. Sau đó mục này trình bày cách các bản ghi `Result` của pipeline được ánh xạ sang hai bảng `papers` và `references` mà đề yêu cầu. Các chỉ số tổng hợp như tỷ lệ thành công hay số reference trung bình nằm ở mục 1.6 và không được nhắc lại ở đây.
 
@@ -79,15 +78,12 @@ Luật này khắt khe hơn những gì được chấp nhận về cấu trúc:
 
 ### 1.3. Kết quả trên dữ liệu đã thu
 
-```{code-cell} python
-:tags: [remove-input]
-Markdown(
-    f"Dữ liệu được đọc từ {n_runs} run (một run chính thức cho mỗi owner). "
-    f"Tổng số issue cấu trúc là {n_validation}, tức bộ handoff {validation_state}. "
-    f"Tổng số issue về độ đầy đủ là {n_quality}, liên quan tới {n_quality_papers} bài, "
-    f"tức dữ liệu {quality_state}. Bảng dưới gom các issue theo báo cáo, bước và nội dung."
-)
-```
+Dữ liệu được đọc từ {eval}`n_runs` run, mỗi owner một run chính thức. Kết quả của hai báo cáo:
+
+- Số issue cấu trúc (`validation.json`): **{eval}`n_validation`**. Bộ handoff chỉ hợp lệ khi con số này bằng 0.
+- Số issue về độ đầy đủ (`quality.json`): **{eval}`n_quality`**, liên quan tới **{eval}`n_quality_papers`** bài. Dữ liệu chỉ đầy đủ khi con số này bằng 0.
+
+Bảng dưới gom các issue theo báo cáo, bước và nội dung.
 
 ```{code-cell} python
 :tags: [remove-input]

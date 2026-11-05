@@ -27,6 +27,9 @@ n_success = int((meta["status"] == "success").sum())
 n_partial = int((meta["status"] == "partial").sum())
 n_not_found = int((meta["status"] == "not_found").sum())
 n_failed = int((meta["status"] == "failed").sum())
+n_scope = h.scope_papers()
+n_pending = n_scope - n_papers
+pct_covered = round(n_papers / n_scope * 100, 2) if n_scope else 0
 pct_success = round(n_success / n_papers * 100, 2) if n_papers else 0
 pct_versions_complete = round(meta["versions_complete"].mean() * 100, 2) if n_papers else 0
 mean_versions = round(meta["version_count"].mean(), 2) if n_papers else 0
@@ -39,8 +42,10 @@ import numpy as np
 for _k, _v in list(globals().items()):
     if isinstance(_v, np.generic):
         globals()[_k] = _v.item()
-Markdown(h.mock_banner())
 ```
+
+> [!NOTE]
+> Số liệu trong mục này lấy từ dữ liệu crawl thật của cả nhóm tại mốc ngày 05/11/2026. Lúc đó quá trình crawl chưa hoàn tất, nên các con số chỉ phản ánh phần dữ liệu đã thu được đến mốc này.
 
 Bước T2 của pipeline lấy metadata của từng bài báo đã được khám phá ở bước T1 (mục 1.2): tiêu đề, danh sách tác giả, nơi công bố và **ngày nộp của từng phiên bản**. Kết quả của mỗi bài là một bản ghi `Result` với `step = "metadata"` theo schema 1.2. Chính bản ghi này quyết định bước T3 (mục 1.4) phải tải nguồn của những phiên bản nào. Mã nguồn nằm trong `src/arxiv_pipeline/metadata/`: `api.py` gửi request và phân tích XML, `service.py` đóng gói kết quả thành `Result`.
 
@@ -127,7 +132,7 @@ Nguyên tắc chung là **thà ghi thiếu còn hơn ghi sai**. Một danh sách
 
 Lỗi mạng **không bao giờ** được ghi thành `not_found`; chỉ khi arXiv trả lời rõ ràng rằng bài không tồn tại thì mới kết luận như vậy. Các trường bắt buộc được kiểm tra là `title`, `authors`, `submission_date`, ngày của từng phiên bản và dãy phiên bản. Trường thiếu được ghi bằng JSON Pointer tính từ gốc `Result`, ví dụ `/data/authors` hay `/data/versions/1/submitted_at`. `venue` không bắt buộc vì nhiều bài chưa được đăng tạp chí.
 
-Trong {eval}`n_papers` bài đã xử lý, có {eval}`n_success` bài `success` ({eval}`pct_success`%), {eval}`n_partial` bài `partial`, {eval}`n_not_found` bài `not_found` và {eval}`n_failed` bài `failed` ([](#tbl-1-3-status)).
+Bộ handoff chỉ nhận kết quả `success` hoặc `partial` cho bước metadata. Kết quả `not_found`/`failed` vẫn được ghi trong `events.jsonl` và được runner thử lại ở lượt sau, nên chúng không xuất hiện trong bảng dưới. Trong {eval}`n_scope` bài thuộc scope, {eval}`n_papers` bài ({eval}`pct_covered`%) đã có metadata được chấp nhận; {eval}`n_pending` bài còn lại chưa có kết quả được chấp nhận tại mốc dữ liệu này. Trong số đã chấp nhận, {eval}`n_success` bài `success` ({eval}`pct_success`%) và {eval}`n_partial` bài `partial` ([](#tbl-1-3-status)).
 
 ```{code-cell} python
 :tags: [remove-input]

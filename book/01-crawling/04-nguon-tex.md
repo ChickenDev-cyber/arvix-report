@@ -26,7 +26,9 @@ n_versions = len(src)
 n_papers_src = src["arxiv_id"].nunique()
 n_ok = int((src["status"] == "success").sum())
 n_unsupported = int((src["status"] == "unsupported").sum())
-n_failed_src = int(src["status"].isin(["failed", "not_found"]).sum())
+meta = h.load("metadata_per_paper.csv")
+n_expected = int(meta["version_count"].sum())
+n_pending_src = n_expected - n_versions
 pct_ok = round(n_ok / n_versions * 100, 2) if n_versions else 0
 pct_unsupported = round(n_unsupported / n_versions * 100, 2) if n_versions else 0
 checked = src[src["invariant_ok"].isin([True, False, "True", "False"])]
@@ -43,8 +45,10 @@ import numpy as np
 for _k, _v in list(globals().items()):
     if isinstance(_v, np.generic):
         globals()[_k] = _v.item()
-Markdown(h.mock_banner())
 ```
+
+> [!NOTE]
+> Số liệu trong mục này lấy từ dữ liệu crawl thật của cả nhóm tại mốc ngày 05/11/2026. Lúc đó quá trình crawl chưa hoàn tất, nên các con số chỉ phản ánh phần dữ liệu đã thu được đến mốc này.
 
 Bước T3 tải gói nguồn mà tác giả đã nộp lên arXiv cho **từng phiên bản** của mỗi bài, giải nén an toàn, chỉ giữ lại file `.tex` và `.bib`, và ghi lại năm số đo dung lượng. Đây là đầu vào của Milestone 2 (Chương 2). Mã nguồn nằm trong `src/arxiv_pipeline/sources/`: `api.py` tải file, `extractor.py` nhận diện định dạng, `handlers/` giải nén theo từng định dạng, và `service.py` đóng gói kết quả thành `Result`.
 
@@ -60,7 +64,7 @@ Danh sách phiên bản lấy từ `Result` metadata đã được chấp nhận
 
 Client tải theo luồng (streaming) bằng `urllib.request`, giãn cách tối thiểu 3 giây giữa hai request như các bước khác, và từ chối file lớn hơn 200 MiB. Lần tải và các lần giải nén lại dùng chung một ngân sách tối đa 3 lần gửi request. Một file gzip bị cắt cụt (thường do đường truyền) được coi là lỗi có thể thử lại; các lỗi cấu trúc khác thì không.
 
-Trong dữ liệu hiện có, {eval}`n_versions` phiên bản của {eval}`n_papers_src` bài đã được xử lý. Trong đó {eval}`n_ok` phiên bản `success` ({eval}`pct_ok`%), {eval}`n_unsupported` phiên bản `unsupported` ({eval}`pct_unsupported`%) và {eval}`n_failed_src` phiên bản `failed` hoặc `not_found`.
+Metadata đã chấp nhận liệt kê tổng cộng {eval}`n_expected` phiên bản. Tại mốc dữ liệu này, {eval}`n_versions` phiên bản của {eval}`n_papers_src` bài đã có kết quả nguồn được chấp nhận, còn {eval}`n_pending_src` phiên bản chưa xử lý xong (kết quả `failed`/`not_found` chỉ nằm trong `events.jsonl` và được thử lại, không vào handoff). Trong số đã chấp nhận, {eval}`n_ok` phiên bản `success` ({eval}`pct_ok`%) và {eval}`n_unsupported` phiên bản `unsupported` ({eval}`pct_unsupported`%).
 
 ## 2. Nhận diện định dạng
 

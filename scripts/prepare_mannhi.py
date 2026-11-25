@@ -17,6 +17,7 @@ import csv
 import importlib
 import json
 import os
+import sqlite3
 import sys
 from pathlib import Path
 from typing import Any
@@ -32,6 +33,10 @@ REFERENCE_FIELDS = [
     "run_id", "arxiv_id", "owner", "status", "complete", "is_mock",
     "s2_reference_count", "arxiv_reference_count",
     "complete_reference_count", "error_code", "retryable",
+]
+M2_PUB_FIELDS = [
+    "arxiv_id", "version_count", "empty_version_count", "parsed_version_count",
+    "raw_element_count", "dedup_element_count", "hierarchy_edge_count",
 ]
 
 
@@ -211,6 +216,83 @@ def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) -> 
         writer.writerows(rows)
 
 
+def collect_m2_hierarchy_data(source_root: Path) -> tuple[dict[str, Any] | None, list[dict[str, Any]]]:
+    """Extract Milestone 2 hierarchical parsing summary from real SQLite if available."""
+    db_path = source_root / "data" / "m2_parsing_real.sqlite"
+    if not db_path.is_file():
+        return None, []
+
+    con = sqlite3.connect(db_path.resolve().as_uri() + "?mode=ro", uri=True)
+    try:
+        cur = con.cursor()
+        pub_rows: list[dict[str, Any]] = []
+        elem_counts = dict(cur.execute("SELECT arxiv_id, COUNT(*) FROM elements GROUP BY arxiv_id").fetchall())
+        edge_counts = dict(cur.execute("SELECT arxiv_id, COUNT(*) FROM hierarchy GROUP BY arxiv_id").fetchall())
+
+        total_declared = 0
+        total_empty = 0
+        pubs_with_empty = 0
+        pubs_all_empty = 0
+        raw_elem_sum = 0
+
+        for arxiv_id, version_count, empty_json, raw_elem_count in cur.execute(
+            "SELECT arxiv_id, version_count, empty_versions, raw_element_count "
+            "FROM publications_meta ORDER BY arxiv_id"
+        ):
+            empty_list = json.loads(empty_json or "[]")
+            empty_cnt = len(empty_list)
+            parsed_cnt = max(0, int(version_count) - empty_cnt)
+            total_declared += int(version_count)
+            total_empty += empty_cnt
+            if empty_cnt > 0:
+                pubs_with_empty += 1
+            if int(raw_elem_count) == 0:
+                pubs_all_empty += 1
+            raw_elem_sum += int(raw_elem_count)
+
+            pub_rows.append({
+                "arxiv_id": arxiv_id,
+                "version_count": int(version_count),
+                "empty_version_count": empty_cnt,
+                "parsed_version_count": parsed_cnt,
+                "raw_element_count": int(raw_elem_count),
+                "dedup_element_count": int(elem_counts.get(arxiv_id, 0)),
+                "hierarchy_edge_count": int(edge_counts.get(arxiv_id, 0)),
+            })
+
+        kind_counts = {
+            str(kind): int(cnt)
+            for kind, cnt in cur.execute(
+                "SELECT kind, COUNT(*) FROM elements GROUP BY kind ORDER BY COUNT(*) DESC"
+            ).fetchall()
+        }
+        dedup_elem_cnt = int(cur.execute("SELECT COUNT(*) FROM elements").fetchone()[0])
+        hierarchy_edge_cnt = int(cur.execute("SELECT COUNT(*) FROM hierarchy").fetchone()[0])
+        parsed_docs = int(kind_counts.get("document", 0))
+        min_id, max_id = cur.execute("SELECT MIN(arxiv_id), MAX(arxiv_id) FROM publications_meta").fetchone()
+
+        summary: dict[str, Any] = {
+            "source_db": str(db_path),
+            "is_mock": False,
+            "arxiv_id_min": min_id,
+            "arxiv_id_max": max_id,
+            "total_publications": len(pub_rows),
+            "publications_with_empty_versions": pubs_with_empty,
+            "publications_all_empty": pubs_all_empty,
+            "declared_versions": total_declared,
+            "parsed_versions": parsed_docs,
+            "empty_versions": total_empty,
+            "raw_element_count_sum": raw_elem_sum,
+            "dedup_element_count": dedup_elem_cnt,
+            "hierarchy_edge_count": hierarchy_edge_cnt,
+            "avg_edges_per_parsed_version": round(hierarchy_edge_cnt / parsed_docs, 2) if parsed_docs else 0.0,
+            "element_kind_counts": kind_counts,
+        }
+        return summary, pub_rows
+    finally:
+        con.close()
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Tổng hợp dữ liệu Discovery/References của Mẫn Nhi.")
     parser.add_argument("--source-root", help="Đường dẫn repo arxiv-data-science (chứa src/ và runs/).")
@@ -232,6 +314,13 @@ def main() -> int:
     )
     write_csv(OUTPUT_DIR / "discovery.csv", DISCOVERY_FIELDS, discovery_rows)
     write_csv(OUTPUT_DIR / "references_per_paper.csv", REFERENCE_FIELDS, reference_rows)
+
+    m2_summary, m2_pub_rows = collect_m2_hierarchy_data(source_root)
+    if m2_summary is not None:
+        (OUTPUT_DIR / "m2_hierarchy_summary.json").write_text(
+            json.dumps(m2_summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+        )
+        write_csv(OUTPUT_DIR / "m2_hierarchy_publications.csv", M2_PUB_FIELDS, m2_pub_rows)
 
     manifest = {
         "source_repository": str(source_root),

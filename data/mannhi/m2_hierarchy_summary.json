@@ -1,0 +1,29 @@
+{
+  "source_db": "/content/drive/.shortcut-targets-by-id/1w9cVHms6Q9aakHKMSJY5DGzmBRAPleeT/arXiv-data/milestone 2/man-nhi/fresh-01/artifacts/result-80bad3dd63894db8a60349b73bcd5592/parsing.sqlite",
+  "is_mock": false,
+  "arxiv_id_min": "2501.12642",
+  "arxiv_id_max": "2501.17641",
+  "total_publications": 5000,
+  "publications_with_empty_versions": 524,
+  "publications_all_empty": 456,
+  "declared_versions": 8251,
+  "parsed_versions": 7592,
+  "empty_versions": 659,
+  "raw_element_count_sum": 3294738,
+  "dedup_element_count": 2221136,
+  "hierarchy_edge_count": 3269197,
+  "avg_edges_per_parsed_version": 430.61,
+  "element_kind_counts": {
+    "sentence": 1728599,
+    "formula": 200626,
+    "item": 98614,
+    "figure": 55527,
+    "subsection": 44019,
+    "section": 36426,
+    "itemize": 15616,
+    "subsubsection": 12652,
+    "enumerate": 11957,
+    "paragraph": 9508,
+    "document": 7592
+  }
+}

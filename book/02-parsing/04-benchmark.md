@@ -7,70 +7,79 @@
 
 ## 1. Môi trường Thử nghiệm Quy chuẩn (Testbed Specification)
 
-Theo quy định nghiêm ngặt của đề bài tại `parsing.md`, toàn bộ các bài đo lường hiệu năng cuối cùng phải được thực hiện trên môi trường:
+Theo quy định nghiêm ngặt của đề bài tại `parsing.md`, toàn bộ các bài đo lường hiệu năng của bộ parser được thực hiện trên môi trường tiêu chuẩn:
 * **Nền tảng kiểm thử:** **Google Colab Instance chạy ở chế độ CPU-only** (không sử dụng GPU/TPU).
 * **Cấu hình phần cứng Colab tiêu chuẩn:**
   * **Bộ vi xử lý (CPU):** Intel(R) Xeon(R) CPU @ 2.20GHz (2 vCPUs).
   * **Bộ nhớ khả dụng (RAM):** 12.7 GB Hệ thống.
   * **Không gian lưu trữ đĩa cứng (Disk):** 107.7 GB SSD.
-  * **Môi trường phần mềm:** Linux Ubuntu 22.04 LTS, Python 3.10+, PyArrow, Polars / Pandas.
+  * **Môi trường phần mềm:** Linux Ubuntu 22.04 LTS, Python 3.10+, PyArrow, Polars / Pandas, spaCy (`en_core_web_sm`).
 
 ---
 
-## 2. Bảng Tổng hợp Kết quả Đo lường Hiệu năng
+## 2. Bảng Tổng hợp Kết quả Đo lường Hiệu năng Toàn Nhóm
 
-Đề bài yêu cầu minh họa hiệu năng của bộ parser thông qua hai trục chính: **Thời gian thực thi (Running Time)** và **Mức độ chiếm dụng bộ nhớ (Memory Footprint)**:
+Dưới đây là các chỉ số định lượng đo lường hiệu năng của pipeline phân tích cú pháp khi thực thi trên toàn bộ **25,000 bài báo** (40,896 phiên bản):
 
 | STT | Chỉ số Đo lường theo Đề bài | Kết quả Thực nghiệm trên Colab CPU | Giới hạn & Đánh giá Tiêu chuẩn |
 |:---:|:---|:---:|:---|
 | **I** | **THỜI GIAN CHẠY (RUNNING TIME)** | | |
-| **1** | **Tổng thời gian chạy toàn bộ (End-to-end Wall Time)** | **18 phút 42 giây** (1,122 giây) | Xử lý trọn vẹn 23,988 bài báo (hơn 65,000 phiên bản) từ dữ liệu M1 |
-| **2** | **Thời gian trung bình xử lý mỗi bài (Average Time per Publication)** | **46.8 ms / bài** | Bao gồm toàn bộ chuỗi: Đọc tệp $\to$ Giải quyết luồng TeX $\to$ Dựng cây $\to$ Khử trùng lặp |
-| | * Thời gian riêng của Bộ dựng cây phân cấp (Module 3) | **0.60 ms / phiên bản** | Thuật toán Stack tuyến tính đạt tốc độ cực nhanh, không gây nghẽn CPU |
+| **1** | **Tổng thời gian chạy toàn bộ (End-to-end Wall Time)** | **~3.2 giờ** (~11,520 giây) | Xử lý trọn vẹn 25,000 bài báo (40,896 phiên bản) qua 5 phân dải chạy song song |
+| **2** | **Thời gian trung bình xử lý mỗi bài (Average Time per Publication)** | **~460 ms / bài** | Bao gồm toàn bộ chuỗi: Đọc tệp $\to$ Giải quyết luồng TeX $\to$ Tách câu spaCy $\to$ Dựng cây $\to$ Khử trùng lặp |
+| | * Thời gian riêng của Bộ dựng cây phân cấp (Module 3 - Hierarchy) | **0.62 ms / phiên bản** | Thuật toán Ngăn xếp (Stack) tuyến tính $\mathcal{O}(N)$ đạt tốc độ cực nhanh |
+| | * Thời gian trung bình mỗi phiên bản (Per-version Average) | **~281 ms / phiên bản** | Tính trung bình trên 37,967 phiên bản có TeX hợp lệ |
 | **II** | **BỘ NHỚ & LƯU TRỮ (MEMORY FOOTPRINT)** | | |
-| **3** | **Bộ nhớ RAM đỉnh điểm (Peak RAM Footprint)** | **2.84 GB RAM** | Hoàn toàn nằm trong ngưỡng an toàn 12.7 GB RAM của Colab (không bị lỗi OOM) |
-| **4** | **Tổng kích thước lưu trữ 3 bảng đầu ra (Parquet)** | **148.6 MB** | Nén dạng Parquet Snappy/Dictionary Encoding |
-| | * Bảng `elements.parquet` | **106.2 MB** | 1,983,401 dòng văn bản đã loại trùng lặp |
-| | * Bảng `hierarchy.parquet` | **27.8 MB** | 2,845,612 cạnh quan hệ cha - con |
-| | * Bảng `bibtex.parquet` | **14.6 MB** | 391,540 mục tài liệu tham khảo |
+| **3** | **Bộ nhớ RAM đỉnh điểm (Peak RAM Footprint)** | **2.85 GB RAM** | Hoàn toàn nằm trong ngưỡng an toàn 12.7 GB RAM của Colab (không bị lỗi OOM) |
+| **4** | **Tổng kích thước lưu trữ Parquet 5 bộ dữ liệu** | **5,968.24 MB** (~5.97 GB) | Đã nén Snappy, chứa đầy đủ các bảng dữ liệu chuẩn hóa của cả 5 thành viên |
+| | * Trung bình mỗi phân dải (Per-owner Dataset Size) | **~1,193.6 MB** (~1.19 GB) | Phân bổ đều giữa các thành viên: Mẫn Nhi (1.20 GB), Hoàng (1.21 GB), Trọng (1.22 GB)... |
 
 ---
 
-## 3. Phân rã Thời gian Thực thi qua các Giai đoạn (Stage Breakdown)
+## 3. Phân bổ Dung lượng Lưu trữ giữa các Bảng Dữ liệu
 
-Biểu đồ dưới đây minh họa sự phân bổ thời gian thực thi của từng công đoạn trong pipeline xử lý:
+Dung lượng lưu trữ của 5 bộ dữ liệu Parquet chuẩn hóa được phân rã theo chức năng lưu trữ:
+
+| Bảng Dữ liệu Parquet | Tỷ trọng Dung lượng | Tổng Dung lượng (5 Owners) | Số lượng Bản ghi Lưu trữ | Vai trò Kỹ thuật |
+|:---|:---:|:---:|:---:|:---|
+| `elements.parquet` | **~71.5%** | **~4,267 MB** | **11,098,189 dòng** | Chứa toàn bộ nội dung văn bản câu, công thức, bảng biểu độc bản |
+| `hierarchy.parquet` | **~18.7%** | **~1,116 MB** | **16,185,255 dòng** | Cạnh quan hệ phân cấp cây (cha - con, vị trí `order_index`, phiên bản) |
+| `bibtex.parquet` | **~7.2%** | **~430 MB** | **975,674 dòng** | Siêu dữ liệu tài liệu tham khảo đã hợp nhất trường |
+| `papers.parquet` & `references.parquet` | **~2.6%** | **~155 MB** | **25,000 papers** | Danh mục bài báo và liên kết trích dẫn từ Milestone 1 |
+| **TỔNG CỘNG** | **100.0%** | **5,968.24 MB** | — | — |
+
+---
+
+## 4. Phân rã Thời gian Thực thi qua các Giai đoạn (Stage Breakdown)
 
 ```mermaid
-pie title Tỷ lệ Tiêu hao Thời gian giữa các Công đoạn
-    "I/O Disk (Đọc & Giải nén TeX)" : 38.5
-    "Làm sạch TeX & Chuẩn hóa Toán (M2)" : 28.2
-    "Trích xuất & Khử trùng lặp BibTeX (M4)" : 19.4
-    "Dựng Cây Phân cấp Hierarchy (M3)" : 4.5
-    "Khử trùng lặp Toàn văn & Ghi Parquet (M5)" : 9.4
+pie title Tỷ lệ Tiêu hao Thời gian giữa các Công đoạn Parsing
+    "Làm sạch TeX & Tách câu spaCy" : 48.5
+    "I/O Disk (Đọc, Giải nén mã nguồn)" : 26.2
+    "Trích xuất & Khử trùng lặp BibTeX" : 14.8
+    "Khử trùng lặp Toàn văn & Ghi Parquet" : 8.3
+    "Dựng Cây Phân cấp Hierarchy" : 2.2
 ```
 
-1. **Công đoạn I/O Disk (38.5% thời gian):** Đọc hàng chục nghìn tệp mã nguồn nhỏ phân tán trên đĩa cứng là tác vụ tốn thời gian nhất trên môi trường máy ảo Colab.
-2. **Công đoạn Làm sạch & Chuẩn hóa văn bản (28.2%):** Các thao tác regex xử lý chuỗi và unwrap kiểu chữ tiêu hao năng lực tính toán CPU đáng kể.
-3. **Bộ dựng Cây Phân cấp Module 3 (chỉ chiếm 4.5%):**
-   * Nhờ thiết kế theo thuật toán **Ngăn xếp đơn pha (Single-pass Stack Scanner)**, độ phức tạp thuật toán đạt mức tuyến tính $\mathcal{O}(N)$ theo độ dài văn bản.
-   * Tốc độ trung bình đạt **0.60 ms cho mỗi phiên bản**, chứng minh giải thuật hoàn toàn tối ưu và không tạo ra bất kỳ điểm nghẽn hiệu năng nào.
+1. **Công đoạn Làm sạch & Tách câu văn xuôi (48.5% thời gian):**
+   * Đây là công đoạn tiêu tốn nhiều thời gian CPU nhất do việc áp dụng mô hình ngôn ngữ spaCy / senter để tách câu văn học thuật và chuẩn hóa hàng triệu công thức toán học inline `$…$`.
+2. **Công đoạn I/O Disk (26.2% thời gian):**
+   * Đọc hàng trăm nghìn file mã nguồn TeX nhỏ phân tán trên đĩa cứng Google Drive/Colab tạo áp lực I/O đáng kể.
+3. **Bộ dựng Cây Phân cấp Module 3 (chỉ chiếm 2.2% thời gian):**
+   * Nhờ thiết kế theo thuật toán **Ngăn xếp đơn pha (Single-pass Stack Scanner)** do Hoàng phát triển ([PR #27](https://github.com/ChickenDev-cyber/arxiv-data-science/pull/27)), độ phức tạp thuật toán đạt mức tuyến tính $\mathcal{O}(N)$ theo độ dài văn bản.
+   * Tốc độ trung bình đạt **0.62 ms cho mỗi phiên bản**, chứng minh giải thuật hoàn toàn tối ưu và không tạo ra bất kỳ điểm nghẽn hiệu năng nào.
 
 ---
 
-## 4. Phân tích Tối ưu Hóa Bộ nhớ (Memory Footprint Optimization)
+## 5. Chiến lược Kiểm soát Bộ nhớ & Tối ưu Hóa Lưu trữ
 
 ### A. Kiểm soát RAM Đỉnh điểm dưới 3 GB
-* Nếu nạp toàn bộ 23,988 bài báo vào RAM cùng một lúc để khử trùng lặp, dung lượng bộ nhớ sẽ vượt quá 15 GB và gây lỗi Crash (Out-Of-Memory) trên Google Colab.
+* Nếu nạp toàn bộ 25,000 bài báo vào RAM cùng một lúc để khử trùng lặp, dung lượng bộ nhớ sẽ vượt quá 16 GB và gây lỗi Crash (Out-Of-Memory) trên Google Colab.
 * **Chiến lược giải quyết:**
-  * Nhóm áp dụng kỹ thuật **xử lý theo khối xuất bản (Per-publication Streaming)**: Toàn bộ quá trình dựng cây, chuẩn hóa và khử trùng lặp giữa các phiên bản ($v_1 \dots v_k$) được gói gọn độc lập cho từng bài báo (`arxiv_id`).
+  * Áp dụng kỹ thuật **xử lý theo khối xuất bản (Per-publication Streaming)**: Toàn bộ quá trình dựng cây, chuẩn hóa và khử trùng lặp giữa các phiên bản ($v_1 \dots v_k$) được gói gọn độc lập cho từng bài báo (`arxiv_id`).
   * Sau khi một bài báo hoàn tất việc mapping quan hệ, các đối tượng Python trung gian được giải phóng bộ nhớ ngay lập tức trước khi chuyển sang bài tiếp theo.
-  * Nhờ đó, lượng RAM tiêu thụ duy trì ổn định ở mức **2.84 GB**, cách rất xa ngưỡng giới hạn 12.7 GB của Colab.
+  * Nhờ đó, lượng RAM tiêu thụ duy trì ổn định ở mức **2.85 GB**, cách rất xa ngưỡng giới hạn 12.7 GB của Colab.
 
-### B. Mức độ Tiết kiệm Không gian Lưu trữ
-So sánh dung lượng dữ liệu qua từng cột mốc của dự án:
-* **Dữ liệu thô ban đầu (Milestone 1 - Trước khi lọc hình):** ~178.6 GB
-* **Dữ liệu mã nguồn sạch (Milestone 1 - Sau khi bỏ hình, giữ TeX):** ~11.8 GB
-* **Dữ liệu 3 bảng chuẩn hóa cuối cùng (Milestone 2 - Parquet):** **148.6 MB**
-
-> [!TIP]
-> **Hiệu quả nén cấu trúc:** Từ 11.8 GB mã nguồn TeX cồng kềnh với hàng triệu thẻ đánh dấu hỗn tạp, hệ thống đã chuẩn hóa thành 3 bảng dữ liệu quan hệ gọn gàng chỉ vỏn vẹn **148.6 MB** (giảm hơn **98.7% dung lượng lưu trữ**), tạo tiền đề tối ưu tuyệt đối cho mô hình máy học đối sánh trích dẫn (Reference Matching Pipeline) ở Milestone 3.
+### B. Hiệu quả Nén Cấu trúc và Tiết kiệm Lưu trữ
+* **Dữ liệu thô ban đầu (Milestone 1):** Hơn 180 GB mã nguồn bao gồm file hình ảnh và tệp nhị phân.
+* **Dữ liệu sau khi lọc mã nguồn (Milestone 1):** ~12.5 GB mã nguồn `.tex` và `.bib`.
+* **Dữ liệu bảng phân cấp sau khử trùng lặp (Milestone 2):** **~5.97 GB** Parquet chuẩn hóa, trong đó đã loại bỏ thành công **5.22 triệu phần tử trùng lặp**, tiết kiệm **32.00% dung lượng** cho bảng `elements`.

@@ -7,105 +7,99 @@
 
 ## 1. Tổng quan Mục tiêu Thống kê
 
-Theo đặc tả của giảng viên trong `parsing.md` và kế hoạch phân công chi tiết của nhóm trưởng, mục thống kê của Milestone 2 tập trung định lượng 4 chỉ số cốt lõi phản ánh chất lượng của toàn bộ quá trình phân tích cú pháp và chuẩn hóa dữ liệu:
+Theo đặc tả của giảng viên trong `parsing.md` và kế hoạch phân công chi tiết của nhóm trưởng tại [2026-11-04-milestone-1-2-report-team-plan-revised.md](../../2026-11-04-milestone-1-2-report-team-plan-revised.md), mục thống kê của Milestone 2 tập trung định lượng 4 chỉ số cốt lõi phản ánh chất lượng và hiệu quả của toàn bộ quá trình phân tích cú pháp và chuẩn hóa dữ liệu:
 
-1. **Tỷ lệ phân tích cú pháp thành công (Parsing Success Rate)** trên toàn bộ kho ngữ liệu.
-2. **Độ bao phủ phiên bản (Version Coverage)** của từng bài báo (bao gồm cả các bản ghi rỗng cho phiên bản PDF-only).
-3. **Cơ cấu phân loại nguồn trích dẫn BibTeX** (`.bib` độc lập vs `\bibitem` trong `.tex` vs bài chỉ có `.bbl` bị lọc theo quy tắc M1).
+1. **Tỷ lệ phân tích cú pháp thành công (Parsing Success Rate)** trên toàn bộ kho ngữ liệu 25,000 bài báo của 5 thành viên.
+2. **Độ bao phủ phiên bản (Version Coverage)** của từng publication (đặc biệt tuân thủ yêu cầu ghi nhận bản ghi rỗng cho phiên bản PDF-only/unsupported, không bỏ qua để phản ánh đúng thực tế).
+3. **Cơ cấu phân loại nguồn trích dẫn BibTeX** (`.bib` độc lập vs `\bibitem` nội suy trong `.tex` vs bài chỉ có `.bbl` bị lọc theo quy tắc an toàn M1).
 4. **Số lượng phần tử và mục trích dẫn trước và sau khi khử trùng lặp (Deduplication Metrics)**, chứng minh mức độ tối ưu hóa lưu trữ và loại bỏ trùng lặp xuyên phiên bản.
 
 ---
 
-## 2. Bảng Chỉ số Thống kê Tổng hợp Milestone 2
+## 2. Bảng Chỉ số Thống kê Tổng hợp Toàn Nhóm Milestone 2
 
-Dưới đây là bảng tổng hợp các chỉ số định lượng thu được từ việc áp dụng pipeline phân tích cú pháp trên toàn bộ 23,988 bài báo thu thập từ Milestone 1:
+Dưới đây là bảng tổng hợp các chỉ số định lượng thu được từ việc áp dụng pipeline phân tích cú pháp trên toàn bộ **25,000 bài báo** thu thập từ 5 phân dải của các thành viên trong nhóm:
 
-| STT | Chỉ số Thống kê theo Đề bài | Giá trị Định lượng | Tỷ lệ / Đánh giá | Phương pháp & Ý nghĩa Kỹ thuật |
+| STT | Chỉ số Thống kê theo Đề bài | Giá trị Định lượng Toàn Nhóm | Tỷ lệ / Đánh giá | Phương pháp & Ý nghĩa Kỹ thuật |
 |:---:|:---|:---:|:---:|:---|
-| **1** | **Tỷ lệ Parse Thành công (Có nguồn TeX)** | **20,744 / 20,870 bài** | **99.40%** | Tỷ lệ các bài có mã nguồn `.tex` được dựng thành công cây phân cấp `VersionHierarchy` hợp lệ, không gặp lỗi cú pháp |
-| | **Tỷ lệ Ghi nhận Phiên bản Rỗng (PDF-only)** | **3,118 / 3,118 bài** | **100.0%** | Các bài không có TeX từ M1 được ghi nhận chính xác `nodes = []`, không bị bỏ qua |
-| **2** | **Độ bao phủ Phiên bản (Version Coverage)** | **65,240 / 65,240 versions** | **100.0%** | 100% tất cả các phiên bản được thu thập từ M1 đều có bản ghi tương ứng trong bảng `hierarchy` |
-| **3** | **Cơ cấu Nguồn Tài liệu Tham khảo BibTeX** | | | *(Xem phân tích chi tiết tại Mục 5)* |
-| | * Nguồn tệp `.bib` độc lập | **13,022 bài** | **62.40%** | Có tệp `.bib` thực sự được gọi qua `\bibliography` / `\addbibresource` |
-| | * Nguồn `\bibitem` nội suy trong `.tex` | **6,427 bài** | **30.80%** | Chứa môi trường `thebibliography` nhúng trực tiếp trong mã nguồn `.tex` |
-| | * Nguồn chỉ có tệp `.bbl` đi kèm | **1,421 bài** | **6.80%** | Tác giả chỉ nộp file `.bbl` đã biên dịch (bị lọc mất ở M1 theo quy tắc an toàn) |
+| **1** | **Tổng số bài báo phân tích (Total Publications)** | **25,000 bài** | **100.0%** | Phân bổ đồng đều 5,000 bài cho mỗi thành viên (5 owner) |
+| **2** | **Tổng số phiên bản khai báo (Declared Versions)** | **40,896 phiên bản** | 1.64 ver/bài | Tính từ $v_1$ và toàn bộ mảng `revised_dates` trong siêu dữ liệu |
+| | * Phiên bản parse thành công (Có nguồn TeX) | **37,967 phiên bản** | **92.84%** | Dựng thành công cây phân cấp `VersionHierarchy` có nút gốc `document` |
+| | * Phiên bản rỗng được ghi nhận (PDF-only / Unsupported) | **2,929 phiên bản** | **7.16%** | Tuân thủ đề bài: ghi nhận `nodes = []`, không sinh cạnh trong `hierarchy` |
+| **3** | **Độ bao phủ Phiên bản (Version Coverage)** | **40,896 / 40,896 versions** | **100.0%** | 100% tất cả các phiên bản khai báo đều được theo dõi trong pipeline |
 | **4** | **Số phần tử nội dung (`elements`)** | | | |
-| | * Trước khi khử trùng lặp (Tổng cộng thô) | **2,845,612 elements** | 100.0% | Tổng số phần tử câu (`sentence`), công thức (`formula`), hình bảng (`figure`) trên mọi phiên bản |
-| | * Sau khi khử trùng lặp toàn văn | **1,983,401 elements** | **69.70%** | Chỉ lưu 1 dòng duy nhất cho các phần tử trùng khớp chính xác sau làm sạch |
-| | * **Mức giảm trùng lặp nội dung** | **-862,211 elements** | **Tiết kiệm 30.3%** | Giảm thiểu 30.3% dung lượng lưu trữ nội dung văn bản dư thừa giữa các phiên bản |
-| **5** | **Số mục tài liệu tham khảo (`bibtex`)** | | | |
-| | * Trước khi khử trùng lặp (Tổng mục thô) | **482,150 entries** | 100.0% | Tổng số mục `\bibitem` và `.bib` trích xuất được từ tất cả các phiên bản |
-| | * Sau khi hợp nhất trường & khử trùng lặp | **391,540 entries** | **81.20%** | Hợp nhất trường thông tin (`title`, `authors`, `year`, `doi`, `journal`, `url`) theo khóa chuẩn duy nhất |
-| | * **Mức giảm trùng lặp trích dẫn** | **-90,610 entries** | **Tiết kiệm 18.8%** | Loại bỏ 18.8% các mục tham chiếu trùng lặp hoặc đổi khóa trích dẫn xuyên phiên bản |
+| | * Trước khi khử trùng lặp (Tổng cộng thô) | **16,320,847 elements** | 100.0% | Tổng số phần tử câu, công thức, hình bảng... trên mọi phiên bản |
+| | * Sau khi khử trùng lặp toàn văn | **11,098,189 elements** | **68.00%** | Chỉ lưu 1 dòng duy nhất cho các phần tử trùng khớp chính xác sau làm sạch |
+| | * **Mức giảm trùng lặp nội dung (Dedup Saved)** | **-5,222,658 elements** | **Tiết kiệm 32.00%** | Giảm thiểu 32% dung lượng lưu trữ nội dung văn bản dư thừa giữa các phiên bản |
+| **5** | **Số cạnh quan hệ phân cấp (`hierarchy`)** | **16,185,255 edges** | 426.3 edges/ver | Cạnh quan hệ cha - con biểu diễn cấu trúc cây bài báo qua các phiên bản |
+| **6** | **Số mục tài liệu tham khảo (`bibtex`)** | **975,674 entries** | 39.0 entries/bài | Hợp nhất trường thông tin (`title`, `authors`, `year`, `doi`, `journal`, `url`) |
+| **7** | **Tổng dung lượng lưu trữ Parquet 5 bộ dữ liệu** | **5,968.24 MB** (~5.97 GB) | ~1.19 GB/owner | Nén Snappy tối ưu hóa phục vụ truy vấn cho Milestone 3 |
 
 ---
 
-## 3. Phân tích Độ bao phủ Phiên bản (Version Coverage)
+## 3. Phân rã Thống kê Chi tiết theo Từng Thành viên (Owner Breakdown)
+
+Để đảm bảo tính minh bạch và đối chiếu chéo kết quả thực thi giữa các thành viên, dữ liệu phân tích cú pháp được bóc tách chi tiết theo 5 phân dải tương ứng với 5 tác giả:
+
+| Thành viên (Owner) | Số bài báo | Phiên bản Khai báo | Phiên bản Parse được | Phiên bản Rỗng | Phần tử Thô | Phần tử Độc bản (Dedup) | Tỷ lệ Tiết kiệm Dedup | Số cạnh Hierarchy | Mục BibTeX | Dung lượng Parquet |
+|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| **Mẫn Nhi** (`man-nhi`) | 5,000 | 8,251 | 7,592 | 659 (7.99%) | 3,294,738 | 2,221,136 | **32.59%** | 3,269,197 | 195,360 | 1,198.67 MB |
+| **Huỳnh Nhi** (`huynh-nhi`) | 5,000 | 8,268 | 7,687 | 581 (7.03%) | 3,213,026 | 2,167,101 | **32.55%** | 3,186,526 | 195,076 | 1,167.11 MB |
+| **Hoàng** (`hoang`) | 5,000 | 8,384 | 7,888 | 496 (5.92%) | 3,280,496 | 2,198,596 | **32.98%** | 3,254,294 | 203,414 | 1,205.07 MB |
+| **Minh Trọng** (`trong`) | 5,000 | 8,060 | 7,449 | 611 (7.58%) | 3,356,229 | 2,288,312 | **31.82%** | 3,327,341 | 194,577 | 1,221.14 MB |
+| **Phúc Khang** (`khang`) | 5,000 | 7,933 | 7,351 | 582 (7.34%) | 3,176,358 | 2,223,044 | **30.01%** | 3,147,897 | 187,247 | 1,176.25 MB |
+| **TỔNG CỘNG TOÀN NHÓM** | **25,000** | **40,896** | **37,967** | **2,929 (7.16%)** | **16,320,847** | **11,098,189** | **32.00%** | **16,185,255** | **975,674** | **5,968.24 MB** |
+
+Biểu đồ dưới đây đối chiếu trực tiếp số lượng phần tử trước và sau khi khử trùng lặp giữa 5 thành viên, phản ánh tính đồng đều và ổn định cao của thuật toán khử trùng lặp trên mọi phân dải dữ liệu:
+
+![So sánh hiệu quả Khử trùng lặp theo từng Owner](../figures/m2-hoang-versions.png)
+
+---
+
+## 4. Phân bố 11 Loại Phần tử Cây Phân cấp trong Bảng `elements`
+
+Cây phân cấp của mỗi phiên bản được phân rã thành 11 loại phần tử (`kind`). Dưới đây là phân bố số lượng và tỷ trọng của từng loại phần tử độc bản sau khi khử trùng lặp trong toàn bộ kho ngữ liệu:
+
+![Phân bố 11 Loại Phần tử Cây Phân cấp Toàn Nhóm](../figures/m2-hoang-elements.png)
+
+| STT | Loại Phần tử (`kind`) | Số lượng Độc bản (`dedup_elements`) | Tỷ lệ Phần trăm | Vai trò trong Cấu trúc Văn bản |
+|:---:|:---|:---:|:---:|:---|
+| **1** | `sentence` (Câu văn xuôi) | **8,634,050** | **77.80%** | Đơn vị nội dung cơ bản sau khi phân tách bằng spaCy / rule-based regex |
+| **2** | `formula` (Công thức toán) | **991,526** | **8.93%** | Các công thức inline `$…$` hoặc khối `equation`, `align` đã chuẩn hóa |
+| **3** | `item` (Mục danh sách) | **493,812** | **4.45%** | Các phần tử con trong môi trường danh sách `\item` |
+| **4** | `figure` (Hình ảnh / Bảng biểu) | **285,123** | **2.57%** | Khối hình ảnh `figure` hoặc bảng `table`, giữ nguyên vị trí trong cây |
+| **5** | `subsection` (Tiểu mục cấp 2) | **222,075** | **2.00%** | Các nhánh mục con cấp 2 (`\subsection{...}`) |
+| **6** | `section` (Chương / Mục cấp 1) | **184,592** | **1.66%** | Các nhánh mục chính cấp 1 (`\section{...}`) |
+| **7** | `itemize` (Danh sách không thứ tự) | **80,860** | **0.73%** | Khối container danh sách gạch đầu dòng |
+| **8** | `subsubsection` (Tiểu mục cấp 3) | **62,123** | **0.56%** | Các nhánh mục con cấp 3 (`\subsubsection{...}`) |
+| **9** | `enumerate` (Danh sách có thứ tự) | **57,865** | **0.52%** | Khối container danh sách đánh số |
+| **10** | `paragraph` (Đoạn định danh) | **48,196** | **0.43%** | Khối tiêu đề đoạn con (`\paragraph{...}`) |
+| **11** | `document` (Nút gốc bài báo) | **37,967** | **0.34%** | Nút gốc đại diện cho từng phiên bản bài báo có nguồn TeX hợp lệ |
+| | **TỔNG CỘNG** | **11,098,189** | **100.0%** | Toàn bộ các phần tử độc bản được lưu trong bảng `elements` |
+
+---
+
+## 5. Phân tích Độ bao phủ Phiên bản & Cơ chế Xử lý Phiên bản Rỗng
 
 Đề bài nhấn mạnh yêu cầu: *"A version without TeX sources, kept as an empty record by Milestone 1, yields no parsed elements: record the version as empty rather than skipping it, so coverage statistics and the tables below reflect reality."*
 
-Nhóm tuân thủ tuyệt đối quy định này. Phân bố các phiên bản bài báo được theo dõi đầy đủ:
-
-```mermaid
-pie title Phân bố Số lượng Phiên bản trên mỗi Bài báo
-    "Bài có 1 phiên bản (v1 duy nhất)" : 65.2
-    "Bài có 2 phiên bản (v1, v2)" : 22.4
-    "Bài có 3 phiên bản (v1, v2, v3)" : 8.1
-    "Bài có >= 4 phiên bản" : 4.3
-```
-
-* **Phiên bản có nguồn TeX hợp lệ:** Chiếm 87.0% tổng số bài. Được đưa qua bộ giải quyết luồng biên dịch (Module 1) và dựng cây phân cấp (Module 3).
-* **Phiên bản không có nguồn TeX (`unsupported` / PDF-only):** Chiếm 13.0% tổng số bài. Module 3 khởi tạo đối tượng `VersionHierarchy` với danh sách `nodes = []`. Nhờ đó:
-  * Không làm sai lệch thống kê tổng số bài đã thu thập.
-  * Trong bảng `hierarchy`, phiên bản này không sinh ra cạnh nào, phản ánh đúng thực tế không có cấu trúc văn bản.
+Nhóm tuân thủ tuyệt đối quy định này trong suốt quá trình xây dựng pipeline:
+* **Toàn bộ 40,896 phiên bản khai báo** đều được theo dõi và ghi nhận đầy đủ.
+* **37,967 phiên bản có nguồn TeX hợp lệ (92.84%):** Được đưa qua bộ phân tích luồng biên dịch và dựng thành công cây phân cấp với nút gốc `document`.
+* **2,929 phiên bản không có nguồn TeX (7.16%):** Bao gồm các bài báo ở dạng PDF-only hoặc không hỗ trợ trích xuất TeX từ Milestone 1. Bộ parser khởi tạo đối tượng `VersionHierarchy` với danh sách `nodes = []`.
+  * Nhờ đó, các phiên bản này không sinh ra bất kỳ cạnh giả nào trong bảng `hierarchy`, nhưng vẫn giữ nguyên bản ghi trong bảng siêu dữ liệu `papers` với cột `parsed_version_count = 0`.
+  * Điều này đảm bảo thống kê độ bao phủ đạt **100% tính xác thực**, không làm sai lệch số lượng bài báo thực tế của kho ngữ liệu.
 
 ---
 
-## 4. Hiệu quả của Khử trùng lặp Hai mức (Two-level Deduplication)
+## 6. Hiệu quả của Khử trùng lặp Toàn văn (Deduplication)
 
-### A. Khử trùng lặp Toàn văn Nội dung (`elements`)
+### A. Khử trùng lặp Nội dung Văn bản (`elements`)
 Việc so khớp toàn văn được thực hiện **sau khi đã hoàn tất bước làm sạch định dạng và chuẩn hóa toán học**:
 * Nếu so khớp trước khi làm sạch, chỉ một khoảng trắng thừa, một lệnh `\centering` hay sự khác biệt giữa `\(x\)` và `$x$` sẽ khiến hai câu giống hệt nhau bị nhận diện thành hai phần tử khác nhau.
-* Nhờ chuỗi tiền xử lý chuẩn hóa ở Module 2 và Module 3, thuật toán exact matching ở Module 5 đã phát hiện và gộp được **862,211 phần tử trùng lặp**, giúp bảng `elements` chỉ cần lưu 1,983,401 dòng.
-* Trong bảng `hierarchy`, các phiên bản sau ($v_2, v_3$) chỉ việc trỏ khóa ngoại `element_id` về phần tử đã tồn tại từ $v_1$, chứng minh tính tối ưu vượt trội của mô hình cơ sở dữ liệu quan hệ.
+* Nhờ chuỗi tiền xử lý chuẩn hóa thống nhất, thuật toán exact matching đã phát hiện và gộp được **5,222,658 phần tử trùng lặp**, giúp bảng `elements` tiết kiệm **32.00% dung lượng** (giảm từ 16.32 triệu dòng xuống còn 11.10 triệu dòng độc bản).
+* Trong bảng `hierarchy`, các phiên bản cập nhật sau ($v_2, v_3$) chỉ việc trỏ khóa ngoại `element_id` về phần tử đã tồn tại từ $v_1$, chứng minh tính tối ưu vượt trội của mô hình cơ sở dữ liệu quan hệ.
 
-### B. Khử trùng lặp và Hợp nhất Trường Tài liệu tham khảo (`bibtex`)
-* Quá trình đối sánh dựa trên mã định danh DOI chuẩn hóa và tiêu đề bài báo đã loại bỏ 90,610 mục tham khảo trùng lặp.
-* Việc áp dụng kỹ thuật **Hợp nhất trường (Field Unionization)** thay vì chọn một bỏ một đảm bảo không làm thất thoát bất kỳ trường siêu dữ liệu nào (ví dụ: $v_1$ có `year` nhưng thiếu `doi`, $v_2$ bổ sung `doi`, mục cuối cùng trong `bibtex` sở hữu đầy đủ cả `year` lẫn `doi`).
-
----
-
-## 5. Thống kê Phân loại Nguồn BibTeX & Phân tích Đánh đổi Kỹ thuật
-
-Một trong những đóng góp thực nghiệm quan trọng của nhóm trong Milestone 2 là việc bóc tách và phân loại nguồn gốc của các mục tài liệu tham khảo trong kho ngữ liệu 20,870 bài báo có mã nguồn TeX:
-
-```mermaid
-pie title Cơ cấu Nguồn Tài liệu Tham khảo BibTeX
-    "Tệp .bib độc lập (\bibliography)" : 62.4
-    "bibitem nội suy trong .tex" : 30.8
-    "Chỉ có .bbl (bị lọc ở M1)" : 6.8
-```
-
-### A. Ba Nhóm Nguồn Tham khảo Thực tế
-
-1. **Nhóm A — Sử dụng tệp `.bib` độc lập (62.40% — 13,022 bài):**
-   * Tác giả quản lý thư viện tài liệu tham khảo tách rời thông qua các file `.bib` (như `ref.bib`, `references.bib`) và gọi vào bài báo qua lệnh `\bibliography{...}` hoặc `\addbibresource{...}`.
-   * Đây là nguồn dữ liệu có độ tin cậy và cấu trúc cao nhất, cho phép trích xuất trực tiếp các trường siêu dữ liệu chuẩn (`title`, `authors`, `year`, `journal`, `doi`).
-2. **Nhóm B — Nhúng `\bibitem` trực tiếp trong `.tex` (30.80% — 6,427 bài):**
-   * Tác giả không dùng BibTeX riêng mà gõ trực tiếp danh mục tham khảo trong môi trường `\begin{thebibliography} ... \end{thebibliography}` của file `.tex`.
-   * Nhóm này đòi hỏi bộ bóc tách regex chuyên sâu của Module 4 để tách các trường thông tin từ văn bản thô.
-3. **Nhóm C — Chỉ có tệp `.bbl` đi kèm (6.80% — 1,421 bài):**
-   * Khi biên dịch LaTeX trên máy cục bộ, trình biên dịch BibTeX tự động sinh ra tệp trung gian `.bbl`. Nhiều tác giả khi đóng gói nộp lên arXiv chỉ nộp file `.tex` và file `.bbl` (không kèm file `.bib` gốc và cũng không nhúng `\bibitem` trong `.tex`).
-
-### B. Phân tích Đánh đổi Kỹ thuật (Technical Trade-off Analysis)
-
-Tại sao lại có 6.8% bài báo rơi vào Nhóm C và không trích xuất được tài liệu tham khảo trong Milestone 2?
-
-> [!NOTE]
-> **Bản chất của sự đánh đổi ở Milestone 1:**
-> Trong quy định lọc dữ liệu nguồn của Milestone 1, nhóm đã đặt ra chính sách lọc bảo vệ an toàn: **chỉ giữ lại các tệp mã nguồn nguyên thủy (`.tex`, `.bib`) và loại bỏ toàn bộ các tệp trung gian sinh ra sau biên dịch (`.bbl`, `.aux`, `.log`, `.out`) cũng như các file nhị phân/hình ảnh**.
-> 
-> * **Lợi ích đạt được ở M1:** Giảm tới **93.7% dung lượng lưu trữ** (từ 7.46 MB/bài xuống 492 KB/bài), loại bỏ triệt để nguy cơ tệp rác và mã độc tiềm ẩn.
-> * **Sự đánh đổi ở M2:** Với 1,421 bài báo (6.8%) mà tác giả chỉ nộp file `.bbl` đã biên dịch chứ không nộp `.bib`, việc M1 xóa bỏ `.bbl` đồng nghĩa với việc không còn nguồn tham khảo để trích xuất trong TeX.
-> 
-> Nhóm quyết định ghi nhận minh bạch con số này trong báo cáo khoa học. Đây là bài học thực tế đắt giá trong kỹ nghệ dữ liệu: **quy tắc lọc ở công đoạn thượng nguồn (upstream) luôn có sự đánh đổi trực tiếp tới khả năng thu hồi dữ liệu ở công đoạn hạ nguồn (downstream)**.
+### B. Hợp nhất Trường Tài liệu tham khảo (`bibtex`)
+* Trích xuất thành công **975,674 mục trích dẫn BibTeX** trên toàn bộ 25,000 bài báo.
+* Việc áp dụng kỹ thuật **Hợp nhất trường (Field Unionization)** thay vì chọn một bỏ một đảm bảo không làm thất thoát bất kỳ trường siêu dữ liệu nào (ví dụ: $v_1$ có `year` nhưng thiếu `doi`, $v_2$ bổ sung `doi`, mục cuối cùng trong `bibtex` sở hữu đầy đủ cả `year` lẫn `doi`), sẵn sàng phục vụ tối ưu cho Milestone 3.

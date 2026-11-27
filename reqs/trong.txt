@@ -1,0 +1,3 @@
+# Dependencies for Trong (Unified data bundle, Splitting/Export M3, Plotly visualizations)
+pandas>=2.0.0
+plotly>=5.18.0

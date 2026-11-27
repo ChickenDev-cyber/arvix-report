@@ -1,3 +1,6 @@
 -r reqs/hoang.txt
 -r reqs/mannhi.txt
 -r reqs/huynhnhi.txt
+-r reqs/trong.txt
+-r reqs/khang.txt
+plotly>=5.18.0

@@ -1,0 +1,3 @@
+# Dependencies for Khang (Normalization M2, Features/Modeling/Error Forensics M3)
+pandas>=2.0.0
+plotly>=5.18.0

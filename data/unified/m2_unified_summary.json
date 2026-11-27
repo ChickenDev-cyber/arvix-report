@@ -1,0 +1,586 @@
+{
+  "source_archive": "data/m3-input-01/khang/m3-delivery.zip",
+  "code_revision": "8345a27",
+  "total_papers_parsed": 22961,
+  "total_papers_empty": 2039,
+  "parsed_paper_rate": 0.91844,
+  "total_versions_parsed": 37967,
+  "total_versions_declared": 40896,
+  "parsed_version_rate": 0.928379,
+  "total_raw_element_occurrences": 16223222,
+  "total_unique_elements": 11098189,
+  "total_dedup_removed": 5125033,
+  "dedup_reduction_rate": 0.3159,
+  "total_hierarchy_edges": 16185255,
+  "total_unified_bibtex_rows": 975674,
+  "total_papers_with_bibtex": 19204,
+  "element_kind_distribution": {
+    "sentence": 8634050,
+    "formula": 991526,
+    "item": 493812,
+    "figure": 285123,
+    "subsection": 222075,
+    "section": 184592,
+    "itemize": 80860,
+    "subsubsection": 62123,
+    "enumerate": 57865,
+    "paragraph": 48196,
+    "document": 37967
+  },
+  "bibtex_entry_type_top12": {
+    "article": 565196,
+    "misc": 187052,
+    "inproceedings": 178092,
+    "book": 29429,
+    "incollection": 4711,
+    "techreport": 2424,
+    "online": 1845,
+    "phdthesis": 1654,
+    "inbook": 1579,
+    "software": 914,
+    "unpublished": 782,
+    "manual": 540
+  },
+  "bibtex_field_completeness": {
+    "title": {
+      "count": 968133,
+      "rate": 0.9923
+    },
+    "authors": {
+      "count": 946661,
+      "rate": 0.9703
+    },
+    "year": {
+      "count": 959671,
+      "rate": 0.9836
+    },
+    "doi": {
+      "count": 332986,
+      "rate": 0.3413
+    },
+    "journal": {
+      "count": 693753,
+      "rate": 0.7111
+    },
+    "url": {
+      "count": 201412,
+      "rate": 0.2064
+    }
+  },
+  "six_table_parquet_bytes": {
+    "papers": 3908515,
+    "references": 78657673,
+    "elements": 946184784,
+    "hierarchy": 92799665,
+    "bibtex": 132553247,
+    "predictions": 3610885
+  },
+  "total_six_table_mib": 1199.45,
+  "m2_three_table_parquet_bytes": 1171537696,
+  "m2_three_table_parquet_mib": 1117.27,
+  "m2_three_table_parquet_gib": 1.091,
+  "bib_source_counts_total": {
+    "bib_file": 14152,
+    "bibitem": 4846,
+    "bbl_missing": 3182,
+    "none": 2558,
+    "both": 262
+  },
+  "benchmark_summary": {
+    "backend": "rule",
+    "total_processed_publications": 25000,
+    "wall_seconds_range": [
+      3807.28,
+      6203.72
+    ],
+    "wall_hours_range": [
+      1.06,
+      1.72
+    ],
+    "peak_rss_mib_range": [
+      674.16,
+      701.77
+    ],
+    "mean_rss_mib_range": [
+      130.04,
+      200.72
+    ]
+  },
+  "by_owner": {
+    "huynh-nhi": {
+      "papers_parsed": 4578,
+      "papers_empty": 422,
+      "parsed_paper_rate": 0.9156,
+      "versions_parsed": 7687,
+      "versions_declared": 8268,
+      "parsed_version_rate": 0.9297,
+      "raw_element_occurrences": 3194213,
+      "unique_elements": 2167101,
+      "dedup_removed": 1027112,
+      "dedup_reduction_rate": 0.3216,
+      "hierarchy_edges": 3186526,
+      "unified_bibtex_rows": 195076,
+      "papers_with_bibtex": 3888,
+      "elements_parquet_bytes": 183719367,
+      "hierarchy_parquet_bytes": 17989603,
+      "bibtex_parquet_bytes": 26063278,
+      "m2_total_parquet_bytes": 227772248,
+      "predictions_rows": 20363,
+      "predictions_parquet_bytes": 730073,
+      "benchmark": {
+        "schema_version": "m2-benchmark-1",
+        "status": "complete",
+        "run_kind": "fresh",
+        "interrupted": false,
+        "exit_code": 0,
+        "backend": "rule",
+        "processed_publications": 5000,
+        "wall_seconds": 3807.2794320149997,
+        "wall_hours": 1.0576,
+        "mean_seconds_per_processed_publication": 0.7614558864029999,
+        "peak_rss_bytes": 727015424,
+        "peak_rss_mib": 693.34,
+        "mean_rss_bytes": 169056131,
+        "mean_rss_mib": 161.22,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        },
+        "packages": {
+          "psutil": "5.9.5",
+          "pyarrow": "23.0.1",
+          "spacy": "3.8.18",
+          "wtpsplit": null
+        }
+      },
+      "pipeline": {
+        "total_publications": 5000,
+        "processed_publications": 5000,
+        "total_wall_time_sec": 3771.251329421997,
+        "avg_time_per_paper_sec": 0.7542502658843994,
+        "checkpoint_backup_seconds": 95.52146042199979,
+        "db_size_mb": 1167.10546875,
+        "parquet_size_mb": 209.8321132659912,
+        "total_versions": 8268,
+        "empty_versions_count": 581,
+        "parsed_versions_count": 7687,
+        "elements_before_dedup": 3213026,
+        "elements_after_dedup": 2167101,
+        "hierarchy_edges_count": 3186526,
+        "bibtex_before_dedup": 314555,
+        "bibtex_after_dedup": 195076,
+        "bib_source_counts": {
+          "bib_file": 2784,
+          "bibitem": 1049,
+          "bbl_missing": 611,
+          "none": 494,
+          "both": 62
+        },
+        "parquet_export": {
+          "elements": 2167101,
+          "hierarchy": 3186526,
+          "bibtex": 195076
+        }
+      },
+      "statistics_summary": {
+        "attempted_publications": 5000,
+        "execution_success_rate": 1.0,
+        "parsing_success_definition": "publication result saved without an exception; not a semantic accuracy score",
+        "declared_versions": 8268,
+        "parsed_version_fraction": 0.929729075955491,
+        "version_accounted_rate": 1.0,
+        "empty_versions": 581,
+        "elements_before_dedup": 3213026,
+        "elements_after_dedup": 2167101,
+        "bibtex_before_dedup": 314555,
+        "bibtex_after_dedup": 195076
+      }
+    },
+    "man-nhi": {
+      "papers_parsed": 4544,
+      "papers_empty": 456,
+      "parsed_paper_rate": 0.9088,
+      "versions_parsed": 7592,
+      "versions_declared": 8251,
+      "parsed_version_rate": 0.9201,
+      "raw_element_occurrences": 3276789,
+      "unique_elements": 2221136,
+      "dedup_removed": 1055653,
+      "dedup_reduction_rate": 0.3222,
+      "hierarchy_edges": 3269197,
+      "unified_bibtex_rows": 195360,
+      "papers_with_bibtex": 3819,
+      "elements_parquet_bytes": 187855417,
+      "hierarchy_parquet_bytes": 18596111,
+      "bibtex_parquet_bytes": 26356032,
+      "m2_total_parquet_bytes": 232807560,
+      "predictions_rows": 21899,
+      "predictions_parquet_bytes": 713758,
+      "benchmark": {
+        "schema_version": "m2-benchmark-1",
+        "status": "complete",
+        "run_kind": "fresh",
+        "interrupted": false,
+        "exit_code": 0,
+        "backend": "rule",
+        "processed_publications": 5000,
+        "wall_seconds": 5863.151363917,
+        "wall_hours": 1.6287,
+        "mean_seconds_per_processed_publication": 1.1726302727834,
+        "peak_rss_bytes": 706912256,
+        "peak_rss_mib": 674.16,
+        "mean_rss_bytes": 165018780,
+        "mean_rss_mib": 157.37,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        },
+        "packages": {
+          "psutil": "5.9.5",
+          "pyarrow": "23.0.1",
+          "spacy": "3.8.18",
+          "wtpsplit": null
+        }
+      },
+      "pipeline": {
+        "total_publications": 5000,
+        "processed_publications": 5000,
+        "total_wall_time_sec": 5800.947038888931,
+        "avg_time_per_paper_sec": 1.1601894077777863,
+        "checkpoint_backup_seconds": 175.9587271700002,
+        "db_size_mb": 1198.671875,
+        "parquet_size_mb": 214.87232780456543,
+        "total_versions": 8251,
+        "empty_versions_count": 659,
+        "parsed_versions_count": 7592,
+        "elements_before_dedup": 3294738,
+        "elements_after_dedup": 2221136,
+        "hierarchy_edges_count": 3269197,
+        "bibtex_before_dedup": 310150,
+        "bibtex_after_dedup": 195360,
+        "bib_source_counts": {
+          "none": 567,
+          "bibitem": 1000,
+          "bib_file": 2790,
+          "bbl_missing": 601,
+          "both": 42
+        },
+        "parquet_export": {
+          "elements": 2221136,
+          "hierarchy": 3269197,
+          "bibtex": 195360
+        }
+      },
+      "statistics_summary": {
+        "attempted_publications": 5000,
+        "execution_success_rate": 1.0,
+        "parsing_success_definition": "publication result saved without an exception; not a semantic accuracy score",
+        "declared_versions": 8251,
+        "parsed_version_fraction": 0.9201308932250636,
+        "version_accounted_rate": 1.0,
+        "empty_versions": 659,
+        "elements_before_dedup": 3294738,
+        "elements_after_dedup": 2221136,
+        "bibtex_before_dedup": 310150,
+        "bibtex_after_dedup": 195360
+      }
+    },
+    "hoang": {
+      "papers_parsed": 4664,
+      "papers_empty": 336,
+      "parsed_paper_rate": 0.9328,
+      "versions_parsed": 7888,
+      "versions_declared": 8384,
+      "parsed_version_rate": 0.9408,
+      "raw_element_occurrences": 3262182,
+      "unique_elements": 2198596,
+      "dedup_removed": 1063586,
+      "dedup_reduction_rate": 0.326,
+      "hierarchy_edges": 3254294,
+      "unified_bibtex_rows": 203414,
+      "papers_with_bibtex": 3923,
+      "elements_parquet_bytes": 192111795,
+      "hierarchy_parquet_bytes": 18502646,
+      "bibtex_parquet_bytes": 27786400,
+      "m2_total_parquet_bytes": 238400841,
+      "predictions_rows": 20130,
+      "predictions_parquet_bytes": 773691,
+      "benchmark": {
+        "schema_version": "m2-benchmark-1",
+        "status": "complete",
+        "run_kind": "fresh",
+        "interrupted": false,
+        "exit_code": 0,
+        "backend": "rule",
+        "processed_publications": 5000,
+        "wall_seconds": 6203.719393546,
+        "wall_hours": 1.7233,
+        "mean_seconds_per_processed_publication": 1.2407438787092,
+        "peak_rss_bytes": 735862784,
+        "peak_rss_mib": 701.77,
+        "mean_rss_bytes": 210473078,
+        "mean_rss_mib": 200.72,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        },
+        "packages": {
+          "psutil": "5.9.5",
+          "pyarrow": "23.0.1",
+          "spacy": "3.8.18",
+          "wtpsplit": null
+        }
+      },
+      "pipeline": {
+        "total_publications": 5000,
+        "processed_publications": 5000,
+        "total_wall_time_sec": 6145.475900650024,
+        "avg_time_per_paper_sec": 1.229095180130005,
+        "checkpoint_backup_seconds": 233.68144993800024,
+        "db_size_mb": 1205.06640625,
+        "parquet_size_mb": 220.5172815322876,
+        "total_versions": 8384,
+        "empty_versions_count": 496,
+        "parsed_versions_count": 7888,
+        "elements_before_dedup": 3280496,
+        "elements_after_dedup": 2198596,
+        "hierarchy_edges_count": 3254294,
+        "bibtex_before_dedup": 328286,
+        "bibtex_after_dedup": 203414,
+        "bib_source_counts": {
+          "bib_file": 3006,
+          "bibitem": 877,
+          "bbl_missing": 621,
+          "none": 445,
+          "both": 51
+        },
+        "parquet_export": {
+          "elements": 2198596,
+          "hierarchy": 3254294,
+          "bibtex": 203414
+        }
+      },
+      "statistics_summary": {
+        "attempted_publications": 5000,
+        "execution_success_rate": 1.0,
+        "parsing_success_definition": "publication result saved without an exception; not a semantic accuracy score",
+        "declared_versions": 8384,
+        "parsed_version_fraction": 0.9408396946564885,
+        "version_accounted_rate": 1.0,
+        "empty_versions": 496,
+        "elements_before_dedup": 3280496,
+        "elements_after_dedup": 2198596,
+        "bibtex_before_dedup": 328286,
+        "bibtex_after_dedup": 203414
+      }
+    },
+    "trong": {
+      "papers_parsed": 4585,
+      "papers_empty": 415,
+      "parsed_paper_rate": 0.917,
+      "versions_parsed": 7449,
+      "versions_declared": 8060,
+      "parsed_version_rate": 0.9242,
+      "raw_element_occurrences": 3334790,
+      "unique_elements": 2288312,
+      "dedup_removed": 1046478,
+      "dedup_reduction_rate": 0.3138,
+      "hierarchy_edges": 3327341,
+      "unified_bibtex_rows": 194577,
+      "papers_with_bibtex": 3868,
+      "elements_parquet_bytes": 192988462,
+      "hierarchy_parquet_bytes": 19320420,
+      "bibtex_parquet_bytes": 26712762,
+      "m2_total_parquet_bytes": 239021644,
+      "predictions_rows": 20613,
+      "predictions_parquet_bytes": 728123,
+      "benchmark": {
+        "schema_version": "m2-benchmark-1",
+        "status": "complete",
+        "run_kind": "fresh",
+        "interrupted": false,
+        "exit_code": 0,
+        "backend": "rule",
+        "processed_publications": 5000,
+        "wall_seconds": 6027.534635923,
+        "wall_hours": 1.6743,
+        "mean_seconds_per_processed_publication": 1.2055069271846,
+        "peak_rss_bytes": 709394432,
+        "peak_rss_mib": 676.53,
+        "mean_rss_bytes": 173126166,
+        "mean_rss_mib": 165.11,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        },
+        "packages": {
+          "psutil": "5.9.5",
+          "pyarrow": "23.0.1",
+          "spacy": "3.8.18",
+          "wtpsplit": null
+        }
+      },
+      "pipeline": {
+        "total_publications": 5000,
+        "processed_publications": 5000,
+        "total_wall_time_sec": 5967.936247825623,
+        "avg_time_per_paper_sec": 1.1935872495651245,
+        "checkpoint_backup_seconds": 180.81913069999973,
+        "db_size_mb": 1221.140625,
+        "parquet_size_mb": 220.4965362548828,
+        "total_versions": 8060,
+        "empty_versions_count": 611,
+        "parsed_versions_count": 7449,
+        "elements_before_dedup": 3356229,
+        "elements_after_dedup": 2288312,
+        "hierarchy_edges_count": 3327341,
+        "bibtex_before_dedup": 302648,
+        "bibtex_after_dedup": 194577,
+        "bib_source_counts": {
+          "bib_file": 2786,
+          "none": 530,
+          "bbl_missing": 587,
+          "bibitem": 1033,
+          "both": 64
+        },
+        "parquet_export": {
+          "elements": 2288312,
+          "hierarchy": 3327341,
+          "bibtex": 194577
+        }
+      },
+      "statistics_summary": {
+        "attempted_publications": 5000,
+        "execution_success_rate": 1.0,
+        "parsing_success_definition": "publication result saved without an exception; not a semantic accuracy score",
+        "declared_versions": 8060,
+        "parsed_version_fraction": 0.9241935483870968,
+        "version_accounted_rate": 1.0,
+        "empty_versions": 611,
+        "elements_before_dedup": 3356229,
+        "elements_after_dedup": 2288312,
+        "bibtex_before_dedup": 302648,
+        "bibtex_after_dedup": 194577
+      }
+    },
+    "khang": {
+      "papers_parsed": 4590,
+      "papers_empty": 410,
+      "parsed_paper_rate": 0.918,
+      "versions_parsed": 7351,
+      "versions_declared": 7933,
+      "parsed_version_rate": 0.9266,
+      "raw_element_occurrences": 3155248,
+      "unique_elements": 2223044,
+      "dedup_removed": 932204,
+      "dedup_reduction_rate": 0.2954,
+      "hierarchy_edges": 3147897,
+      "unified_bibtex_rows": 187247,
+      "papers_with_bibtex": 3706,
+      "elements_parquet_bytes": 189509743,
+      "hierarchy_parquet_bytes": 18390885,
+      "bibtex_parquet_bytes": 25634775,
+      "m2_total_parquet_bytes": 233535403,
+      "predictions_rows": 18436,
+      "predictions_parquet_bytes": 665240,
+      "benchmark": {
+        "schema_version": "m2-benchmark-1",
+        "status": "complete",
+        "run_kind": "fresh",
+        "interrupted": false,
+        "exit_code": 0,
+        "backend": "rule",
+        "processed_publications": 5000,
+        "wall_seconds": 5416.476577267001,
+        "wall_hours": 1.5046,
+        "mean_seconds_per_processed_publication": 1.0832953154534002,
+        "peak_rss_bytes": 722931712,
+        "peak_rss_mib": 689.44,
+        "mean_rss_bytes": 136352886,
+        "mean_rss_mib": 130.04,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605810176"
+        },
+        "packages": {
+          "psutil": "5.9.5",
+          "pyarrow": "23.0.1",
+          "spacy": "3.8.18",
+          "wtpsplit": null
+        }
+      },
+      "pipeline": {
+        "total_publications": 5000,
+        "processed_publications": 5000,
+        "total_wall_time_sec": 5362.505642414093,
+        "avg_time_per_paper_sec": 1.0725011284828185,
+        "checkpoint_backup_seconds": 172.77445472200066,
+        "db_size_mb": 1176.24609375,
+        "parquet_size_mb": 215.68364715576172,
+        "total_versions": 7933,
+        "empty_versions_count": 582,
+        "parsed_versions_count": 7351,
+        "elements_before_dedup": 3176358,
+        "elements_after_dedup": 2223044,
+        "hierarchy_edges_count": 3147897,
+        "bibtex_before_dedup": 291469,
+        "bibtex_after_dedup": 187247,
+        "bib_source_counts": {
+          "bib_file": 2786,
+          "bibitem": 887,
+          "bbl_missing": 762,
+          "none": 522,
+          "both": 43
+        },
+        "parquet_export": {
+          "elements": 2223044,
+          "hierarchy": 3147897,
+          "bibtex": 187247
+        }
+      },
+      "statistics_summary": {
+        "attempted_publications": 5000,
+        "execution_success_rate": 1.0,
+        "parsing_success_definition": "publication result saved without an exception; not a semantic accuracy score",
+        "declared_versions": 7933,
+        "parsed_version_fraction": 0.9266355729232321,
+        "version_accounted_rate": 1.0,
+        "empty_versions": 582,
+        "elements_before_dedup": 3176358,
+        "elements_after_dedup": 2223044,
+        "bibtex_before_dedup": 291469,
+        "bibtex_after_dedup": 187247
+      }
+    }
+  }
+}

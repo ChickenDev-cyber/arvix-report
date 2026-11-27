@@ -1,0 +1,289 @@
+{
+  "diagnostic_11_papers": {
+    "scope": "11 TeX papers (2506.20788-2506.20798 v1) + 1 PDF-only (2506.20799v1), 1574 prose blocks",
+    "methods": [
+      {
+        "method": "rule",
+        "label": "Rule baseline",
+        "config": "Python + regex/vocab",
+        "diagnostic_passed": 7,
+        "diagnostic_total": 12,
+        "contract_passed": 40,
+        "contract_total": 40,
+        "sentences": 5635,
+        "changed_blocks": 0,
+        "seconds_min": 0.54,
+        "seconds_max": 0.797
+      },
+      {
+        "method": "punkt",
+        "label": "Punkt",
+        "config": "NLTK 3.10.4, punkt_tab English",
+        "diagnostic_passed": 8,
+        "diagnostic_total": 12,
+        "contract_passed": 38,
+        "contract_total": 40,
+        "sentences": 5630,
+        "changed_blocks": 4,
+        "seconds": 0.786
+      },
+      {
+        "method": "spacy",
+        "label": "spaCy senter",
+        "config": "spaCy 3.8.18, en_core_web_sm 3.8.0",
+        "diagnostic_passed": 10,
+        "diagnostic_total": 12,
+        "contract_passed": 35,
+        "contract_total": 40,
+        "sentences": 5608,
+        "changed_blocks": 16,
+        "seconds": 3.37
+      },
+      {
+        "method": "sat",
+        "label": "SaT",
+        "config": "wtpsplit 2.2.2, sat-3l-sm ONNX CPU",
+        "diagnostic_passed": 9,
+        "diagnostic_total": 12,
+        "contract_passed": 27,
+        "contract_total": 40,
+        "sentences": 5466,
+        "changed_blocks": 139,
+        "seconds": 222.134
+      }
+    ],
+    "diagnostic_cases": [
+      {
+        "name": "initials-hyphen",
+        "rule_correct": false,
+        "punkt_correct": false
+      },
+      {
+        "name": "initials-list",
+        "rule_correct": false,
+        "punkt_correct": false
+      },
+      {
+        "name": "initials-single",
+        "rule_correct": false,
+        "punkt_correct": false
+      },
+      {
+        "name": "initials-unseen",
+        "rule_correct": false,
+        "punkt_correct": false
+      },
+      {
+        "name": "country-continues",
+        "rule_correct": false,
+        "punkt_correct": true
+      },
+      {
+        "name": "country-ends",
+        "rule_correct": true,
+        "punkt_correct": true
+      },
+      {
+        "name": "initials-ends",
+        "rule_correct": true,
+        "punkt_correct": true
+      },
+      {
+        "name": "decimal",
+        "rule_correct": true,
+        "punkt_correct": true
+      },
+      {
+        "name": "math",
+        "rule_correct": true,
+        "punkt_correct": true
+      },
+      {
+        "name": "citation",
+        "rule_correct": true,
+        "punkt_correct": true
+      },
+      {
+        "name": "latex-spacing",
+        "rule_correct": true,
+        "punkt_correct": true
+      },
+      {
+        "name": "url",
+        "rule_correct": true,
+        "punkt_correct": true
+      }
+    ]
+  },
+  "range_benchmark_100_papers": {
+    "metadata": {
+      "date": "2026-11-13",
+      "timezone": "Asia/Bangkok",
+      "cpu": "Intel(R) Core(TM) i5-8365U CPU @ 1.60GHz",
+      "os": "Linux-7.2.11-arch1-1-x86_64-with-glibc2.44",
+      "model": "sat-3l-sm",
+      "onnx_threads": 2,
+      "inter_op_threads": 1,
+      "sampling": "70 evenly spaced June IDs 2506.20788..2506.24000 plus 30 July IDs 2507.00001..2507.01658; v1 only",
+      "includes": "masking, model inference, offset mapping, preservation checks and hashing",
+      "excludes": "network download, model download/load/warmup, gathering/cleanup/hierarchy preparation, bibliography, deduplication and database writes",
+      "experiment_script_sha256": "c4ee58a0251c29584a7dd619c101cd552419f306521a0bb6b08e988c3cfb6aaf",
+      "script_snapshot_note": "Final source snapshot; internal-batch CLI option added after initial pilot runs. Default internal batch equals outer batch, unchanged for those runs."
+    },
+    "environment": {
+      "python": "3.12.13 (main, May 10 2026, 19:30:01) [Clang 22.1.3 ]",
+      "platform": "Linux-7.2.11-arch1-1-x86_64-with-glibc2.44",
+      "packages": {
+        "spacy": "3.8.18",
+        "en-core-web-sm": "3.8.0",
+        "wtpsplit": "2.2.2",
+        "onnxruntime": "1.31.1",
+        "transformers": "5.22.2",
+        "numpy": "2.5.4",
+        "psutil": "7.2.2"
+      }
+    },
+    "model_checksums": {
+      "sat-3l-sm/config.json": "d61498bc239f773126ee794446cdcad88822967e0b02ae7bd070f725c98be791",
+      "sat-3l-sm/model_optimized.onnx": "8573277b4dbea9c5fb1b4cfd8c21e5aa628069ac8258d1342ba664e1b64ada6d",
+      "xlm-roberta-base-tokenizer/config.json": "d66ed8cd4f2a93b358c245e50736fa389ed4f35c0bae7aad0b32abb20c62b579",
+      "xlm-roberta-base-tokenizer/tokenizer_config.json": "994f46754c5bf4014f1aa92d34b1374319c3a6b3f702105cd5b742beaecd18ce",
+      "xlm-roberta-base-tokenizer/sentencepiece.bpe.model": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+      "xlm-roberta-base-tokenizer/tokenizer.json": "a898ea75433890f6610f4e470b8ebeb0c21dce5c8dd61f892eb09eb5919d2e2c"
+    },
+    "coverage": {
+      "ok": 93,
+      "download_missing": 1,
+      "empty_source": 6
+    },
+    "preparation": {
+      "papers_count": 100,
+      "seconds": 35.88736533399788,
+      "blocks": 7525,
+      "characters": 4803251
+    },
+    "downloads_first_pass_status_counts": {
+      "reused": 1,
+      "downloaded": 97,
+      "download_error:28:200": 2
+    },
+    "downloads_final_status_counts": {
+      "cached": 98,
+      "download_error:28:200": 1,
+      "downloaded": 1
+    },
+    "spacy_batch_outputs_equal": true,
+    "pilot_outputs_equal": true,
+    "rows": [
+      {
+        "backend": "spacy",
+        "outer_batch": 1,
+        "papers": 93,
+        "blocks": 7525,
+        "seconds": 17.277040118002333,
+        "peak_rss_mib": 151.54296875,
+        "load_seconds_median": 1.528128726000432,
+        "sentences": 31607,
+        "output_sha256": "6664c1e9f9ae87d2526fb4e4c4156964837a2ea32d56f036bfdaeea24dc78511",
+        "seconds_per_version": 0.18577462492475627,
+        "hours_for_40000_tex_versions": 2.0641624991639587,
+        "characters_per_second": 278013.5351422324,
+        "baseline_rss_mib": 29.27734375,
+        "cpu_count": 8
+      },
+      {
+        "backend": "spacy",
+        "outer_batch": 32,
+        "papers": 93,
+        "blocks": 7525,
+        "seconds": 9.699630553004681,
+        "peak_rss_mib": 163.59375,
+        "load_seconds_median": 1.1305590929987375,
+        "sentences": 31607,
+        "output_sha256": "6664c1e9f9ae87d2526fb4e4c4156964837a2ea32d56f036bfdaeea24dc78511",
+        "seconds_per_version": 0.10429710272048044,
+        "hours_for_40000_tex_versions": 1.158856696894227,
+        "characters_per_second": 495199.37628058257,
+        "baseline_rss_mib": 29.34375,
+        "cpu_count": 8
+      },
+      {
+        "backend": "sat",
+        "outer_batch": 1,
+        "internal_batch": 1,
+        "papers": 93,
+        "blocks": 7525,
+        "seconds": 1283.9098936170194,
+        "peak_rss_mib": 1310.13671875,
+        "load_seconds_median": 9.70986169949174,
+        "sentences": 31343,
+        "seconds_per_version": 13.805482727064724,
+        "hours_for_40000_tex_versions": 153.3942525229414,
+        "characters_per_second": 3741.112225927572,
+        "baseline_rss_mib": null,
+        "cpu_count": null
+      }
+    ]
+  },
+  "sat_pilot_3_papers": {
+    "papers": 3,
+    "paper_ids": [
+      "2506.20788",
+      "2506.20793",
+      "2506.20798"
+    ],
+    "blocks": 236,
+    "characters": 144345,
+    "sentences": 907,
+    "runs": [
+      {
+        "outer_batch": 1,
+        "internal_batch": 1,
+        "bucket": true,
+        "model_load_seconds": 9.587991268999758,
+        "inference_seconds": 29.529691240997636,
+        "seconds_per_paper": 9.843230413665879,
+        "hours_for_40000_versions": 109.36922681850976,
+        "peak_rss_mib": 1306.4296875,
+        "baseline_rss_mib": 25.6171875,
+        "output_sha256": "a24053978c778ef3b47ab0029d4698b4c015c038ca0e0fe66ce0ae112d4615c2"
+      },
+      {
+        "outer_batch": 1,
+        "internal_batch": 32,
+        "bucket": true,
+        "model_load_seconds": 9.637447590997908,
+        "inference_seconds": 33.14755551700364,
+        "seconds_per_paper": 11.049185172334546,
+        "hours_for_40000_versions": 122.76872413705051,
+        "peak_rss_mib": 1734.640625,
+        "baseline_rss_mib": 25.7109375,
+        "output_sha256": "a24053978c778ef3b47ab0029d4698b4c015c038ca0e0fe66ce0ae112d4615c2"
+      },
+      {
+        "outer_batch": 8,
+        "internal_batch": 8,
+        "bucket": true,
+        "model_load_seconds": 10.80234872699657,
+        "inference_seconds": 32.48455025200383,
+        "seconds_per_paper": 10.828183417334609,
+        "hours_for_40000_versions": 120.31314908149565,
+        "peak_rss_mib": 1344.375,
+        "baseline_rss_mib": 25.29296875,
+        "output_sha256": "a24053978c778ef3b47ab0029d4698b4c015c038ca0e0fe66ce0ae112d4615c2"
+      },
+      {
+        "outer_batch": 32,
+        "internal_batch": 32,
+        "bucket": true,
+        "model_load_seconds": 10.391863611002918,
+        "inference_seconds": 37.33827278400713,
+        "seconds_per_paper": 12.446090928002377,
+        "hours_for_40000_versions": 138.2898992000264,
+        "peak_rss_mib": 2270.78125,
+        "baseline_rss_mib": 25.6171875,
+        "output_sha256": "a24053978c778ef3b47ab0029d4698b4c015c038ca0e0fe66ce0ae112d4615c2"
+      }
+    ]
+  }
+}

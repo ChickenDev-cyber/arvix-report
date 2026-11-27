@@ -1,0 +1,157 @@
+{
+  "arxiv_id": "2501.12643",
+  "elements": [
+    {
+      "element_id": "2501.12643#root1",
+      "kind": "document",
+      "content": "Tensor cross interpolation approach for quantum impurity problems based on the weak-coupling expansion"
+    },
+    {
+      "element_id": "2501.12643#s1",
+      "kind": "sentence",
+      "content": "We apply the tensor cross interpolation (TCI) algorithm to solve equilibrium quantum impurity problems with high precisi"
+    },
+    {
+      "element_id": "2501.12643#s2",
+      "kind": "sentence",
+      "content": "The TCI algorithm, a kind of active learning method, factorizes high-dimensional integrals that appear in the perturbati"
+    },
+    {
+      "element_id": "2501.12643#s3",
+      "kind": "sentence",
+      "content": "This method is free from the sign problem which quantum Monte Carlo methods sometimes suffer from, and allows one to dir"
+    },
+    {
+      "element_id": "2501.12643#s4",
+      "kind": "sentence",
+      "content": "We benchmark the TCI impurity solver on an exactly solvable impurity model, and find good agreement with the exact solut"
+    },
+    {
+      "element_id": "2501.12643#s5",
+      "kind": "sentence",
+      "content": "We also incorporate the TCI impurity solver into the dynamical mean-field theory to solve the Hubbard model, and show th"
+    },
+    {
+      "element_id": "2501.12643#s6",
+      "kind": "sentence",
+      "content": "Behind the effectiveness of the TCI approach for quantum impurity problems lies the fact that the integrands in the weak"
+    },
+    {
+      "element_id": "2501.12643#h1",
+      "kind": "section",
+      "content": "Introduction"
+    },
+    {
+      "element_id": "2501.12643#s7",
+      "kind": "sentence",
+      "content": "Solving quantum impurity problems is a fundamental issue in condensed matter physics."
+    },
+    {
+      "element_id": "2501.12643#s8",
+      "kind": "sentence",
+      "content": "They describe localized impurity states hybridized with a bath of noninteracting particles, providing a basis for the un"
+    },
+    {
+      "element_id": "2501.12643#s9",
+      "kind": "sentence",
+      "content": "The impurity model setup is realized not only in solid states \\cite{Kondo_effect_in_solid_state1,Kondo_effect_in_solid_s"
+    },
+    {
+      "element_id": "2501.12643#s10",
+      "kind": "sentence",
+      "content": "Quantum impurity problems also play a central role in the dynamical mean-field theory (DMFT) \\cite{DMFT,DMFT_review,DMFT"
+    },
+    {
+      "element_id": "2501.12643#s11",
+      "kind": "sentence",
+      "content": "It has been applied to study the metal-to-Mott insulator transition \\cite{MIT_Jarrell,MIT0,MIT2,MIT7}, high-temperature "
+    },
+    {
+      "element_id": "2501.12643#s12",
+      "kind": "sentence",
+      "content": "Various methods have been developed to solve quantum impurity problems, among which the continuous-time quantum Monte Ca"
+    },
+    {
+      "element_id": "2501.12643#s13",
+      "kind": "sentence",
+      "content": "In CT-QMC, one expands the partition function and observables into infinite series, which can be classified into weak- a"
+    }
+  ],
+  "hierarchy": [
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq1",
+      "parent_id": "2501.12643#h3"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq10",
+      "parent_id": "2501.12643#h6"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq11",
+      "parent_id": "2501.12643#h6"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq12",
+      "parent_id": "2501.12643#h6"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq13",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq14",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq15",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq16",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq17",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq18",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq19",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq2",
+      "parent_id": "2501.12643#h3"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq20",
+      "parent_id": "2501.12643#h7"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq21",
+      "parent_id": "2501.12643#h8"
+    },
+    {
+      "version": 1,
+      "element_id": "2501.12643#eq22",
+      "parent_id": "2501.12643#h8"
+    }
+  ]
+}

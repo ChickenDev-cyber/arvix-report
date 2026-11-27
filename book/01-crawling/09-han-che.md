@@ -30,7 +30,14 @@ T4 References lưu checkpoint sau mỗi trang hợp lệ, cache ngày nộp arXi
 - So sánh số lượng `raw_references`, `arxiv_reference_count` và `complete_reference_count` để thấy rõ phần dữ liệu bị loại hoặc thiếu metadata.
 - Chỉ kết luận về hiệu năng toàn dải sau khi có run thật, đầy đủ phạm vi và benchmark đúng môi trường yêu cầu.
 
-## 4. Những điều chưa được xác nhận trong dữ liệu gửi kèm
+## 4. Tình trạng xác nhận trên dữ liệu thật của Mẫn Nhi
 
-ZIP hiện có `statistics/baseline-001.json` và `benchmarks/baseline-001.json` đều đánh dấu `is_mock=true`; accepted results cũng chỉ chứa một số bản ghi mẫu. Vì vậy chưa thể dùng chúng để kết luận tỷ lệ crawl thật, số lượng references toàn dải hoặc hiệu năng chính thức. Không có dữ liệu run thật đầy đủ trong gói được cung cấp để lập bảng trước/sau resume có ý nghĩa thực nghiệm.
+Trên bản chạy thật `m1-colab-man-nhi-01` (`is_mock=false`), các kết quả đã được xác nhận trong `accepted_results.jsonl` gồm:
+
+- **Discovery:** Hoàn tất `5.000/5.000` ID (`0` `excluded`, `0` `unresolved`).
+- **Metadata:** `5.000` bài (`4.998` `success`, `2` `partial`).
+- **Sources:** `8.199` phiên bản (`7.590` `success`, `609` `unsupported` không có mã nguồn TeX).
+- **References:** `4.994` bài hoàn tất phân trang (`3.538` `success`, `1.456` `empty`, `78.635` arXiv ID duy nhất đạt `100%` metadata), còn `6` bài chưa có bản ghi `references`.
+
+*(Lưu ý: các file `statistics/baseline-001.json` và `benchmarks/baseline-001.json` trong thư mục gốc của repo code vẫn giữ `is_mock=true` để phục vụ kiểm thử tự động và không được trộn vào kết quả thực nghiệm.)*
 

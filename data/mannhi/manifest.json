@@ -18,9 +18,17 @@
       "mannhi_records": 0,
       "discovery_rows": 0,
       "reference_rows": 0
+    },
+    {
+      "run_id": "m1-colab-man-nhi-01",
+      "is_mock": false,
+      "accepted_result_records": 18194,
+      "mannhi_records": 18194,
+      "discovery_rows": 5000,
+      "reference_rows": 4994
     }
   ],
-  "discovery_rows": 0,
-  "reference_rows": 1,
+  "discovery_rows": 5000,
+  "reference_rows": 4995,
   "note": "Kiểm tra is_mock trước khi sử dụng số liệu làm kết quả thực nghiệm."
 }

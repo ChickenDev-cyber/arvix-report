@@ -145,12 +145,22 @@ def get_error_fields(record: dict[str, Any]) -> tuple[str, Any]:
     return "", ""
 
 
-def collect_run_data(source_root: Path, selected_run_id: str | None):
+def collect_run_data(source_root: Path, selected_run_id: str | None, extra_runs_dirs: list[Path] | None = None):
+    candidate_run_dirs: list[Path] = []
     runs_dir = source_root / "runs"
-    if not runs_dir.is_dir():
+    if runs_dir.is_dir():
+        candidate_run_dirs.extend(sorted(p for p in runs_dir.iterdir() if p.is_dir()))
+    for extra in extra_runs_dirs or []:
+        if extra.is_dir():
+            if (extra / "accepted_results.jsonl").is_file():
+                candidate_run_dirs.append(extra)
+            else:
+                candidate_run_dirs.extend(sorted(p for p in extra.iterdir() if p.is_dir()))
+
+    if not candidate_run_dirs:
         raise FileNotFoundError(f"Không tìm thấy thư mục runs trong {source_root}")
 
-    run_dirs = sorted(p for p in runs_dir.iterdir() if p.is_dir())
+    run_dirs = candidate_run_dirs
     if selected_run_id:
         run_dirs = [p for p in run_dirs if p.name == selected_run_id]
         if not run_dirs:
@@ -170,40 +180,73 @@ def collect_run_data(source_root: Path, selected_run_id: str | None):
         run_is_mock = bool(scope.get("is_mock", False)) or any(r.get("is_mock") is True for r in records)
         own_records = [r for r in records if is_mannhi(r)]
 
+        disc_count = 0
+        ref_count = 0
         for record in own_records:
-            task_type = str(record.get("task_type") or "").lower()
+            task_type = str(record.get("task_type") or record.get("step") or "").lower()
             arxiv_id = str(record.get("arxiv_id") or "")
             status = record.get("status", "")
             is_mock = bool(record.get("is_mock", run_is_mock))
             error_code, retryable = get_error_fields(record)
+            data = record.get("data") if isinstance(record.get("data"), dict) else {}
 
             if task_type == "discovery":
-                discovery_rows.append({
-                    "run_id": run_id, "arxiv_id": arxiv_id,
-                    "owner": record.get("owner", ""), "status": status,
-                    "is_mock": is_mock, "error_code": error_code,
-                    "retryable": retryable,
-                })
+                if isinstance(data.get("papers"), list):
+                    for item in data["papers"]:
+                        pid = item.get("arxiv_id", "") if isinstance(item, dict) else str(item)
+                        discovery_rows.append({
+                            "run_id": run_id, "arxiv_id": pid,
+                            "owner": record.get("owner", ""), "status": "found",
+                            "is_mock": is_mock, "error_code": error_code,
+                            "retryable": retryable,
+                        })
+                        disc_count += 1
+                    for pid in data.get("excluded_ids") or []:
+                        discovery_rows.append({
+                            "run_id": run_id, "arxiv_id": str(pid),
+                            "owner": record.get("owner", ""), "status": "excluded",
+                            "is_mock": is_mock, "error_code": error_code,
+                            "retryable": retryable,
+                        })
+                        disc_count += 1
+                    for pid in data.get("unresolved_ids") or []:
+                        discovery_rows.append({
+                            "run_id": run_id, "arxiv_id": str(pid),
+                            "owner": record.get("owner", ""), "status": "unresolved",
+                            "is_mock": is_mock, "error_code": error_code,
+                            "retryable": retryable,
+                        })
+                        disc_count += 1
+                else:
+                    discovery_rows.append({
+                        "run_id": run_id, "arxiv_id": arxiv_id,
+                        "owner": record.get("owner", ""), "status": status,
+                        "is_mock": is_mock, "error_code": error_code,
+                        "retryable": retryable,
+                    })
+                    disc_count += 1
             elif task_type == "references":
                 metrics = record.get("metrics") if isinstance(record.get("metrics"), dict) else {}
+                complete_val = data.get("complete", record.get("complete", ""))
                 reference_rows.append({
                     "run_id": run_id, "arxiv_id": arxiv_id,
                     "owner": record.get("owner", ""), "status": status,
-                    "complete": record.get("complete", ""),
+                    "complete": complete_val,
                     "is_mock": is_mock,
                     "s2_reference_count": metrics.get("s2_reference_count", record.get("s2_reference_count", "")),
                     "arxiv_reference_count": metrics.get("arxiv_reference_count", record.get("arxiv_reference_count", "")),
                     "complete_reference_count": metrics.get("complete_reference_count", record.get("complete_reference_count", "")),
                     "error_code": error_code, "retryable": retryable,
                 })
+                ref_count += 1
 
         run_manifest.append({
             "run_id": run_id,
             "is_mock": run_is_mock,
             "accepted_result_records": len(records),
             "mannhi_records": len(own_records),
-            "discovery_rows": sum(1 for r in own_records if r.get("task_type") == "discovery"),
-            "reference_rows": sum(1 for r in own_records if r.get("task_type") == "references"),
+            "discovery_rows": disc_count,
+            "reference_rows": ref_count,
         })
 
     return discovery_rows, reference_rows, run_manifest
@@ -297,12 +340,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Tổng hợp dữ liệu Discovery/References của Mẫn Nhi.")
     parser.add_argument("--source-root", help="Đường dẫn repo arxiv-data-science (chứa src/ và runs/).")
     parser.add_argument("--run-id", help="Chỉ xử lý một run_id cụ thể; mặc định xử lý tất cả run có dữ liệu.")
+    parser.add_argument("--extra-runs-dir", action="append", default=[], help="Thư mục runs bổ sung (ví dụ m1-colab-man-nhi-01/corpus/runs).")
     args = parser.parse_args()
+
+    extra_dirs = [Path(p).expanduser().resolve() for p in args.extra_runs_dir]
+    default_local_m1 = REPO_ROOT.parent / "m1-colab-man-nhi-01" / "corpus" / "runs"
+    if default_local_m1.is_dir() and default_local_m1.resolve() not in extra_dirs:
+        extra_dirs.append(default_local_m1.resolve())
 
     try:
         source_root = find_source_root(args.source_root)
         assigned_ranges = load_assigned_ranges(source_root)
-        discovery_rows, reference_rows, runs = collect_run_data(source_root, args.run_id)
+        discovery_rows, reference_rows, runs = collect_run_data(source_root, args.run_id, extra_dirs)
     except (FileNotFoundError, RuntimeError, ValueError, KeyError) as exc:
         print(f"[ERROR] {exc}", file=sys.stderr)
         return 1

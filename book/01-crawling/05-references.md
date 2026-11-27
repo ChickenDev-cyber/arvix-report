@@ -100,14 +100,24 @@ T4 dùng chung hợp đồng `CheckpointStore` (`load(namespace, key)`, `save(re
 
 Key trang gồm owner, arXiv ID, page size và fields. Cache ngày dùng key `[arxiv_id]`; `run_id` được cô lập ở tầng store. Khi resume, `max_pages` chỉ đếm trang tải mới trong lượt hiện tại, nên chương trình có thể tiếp tục sau khi đã lưu 50 trang trước đó. Checkpoint sai schema hoặc sai identity phải báo lỗi rõ ràng, không được âm thầm xem như cache rỗng.
 
-## 7. Giới hạn của số liệu trong bản repository hiện tại
+## 7. Kết quả thực nghiệm từ run thật (`m1-colab-man-nhi-01`)
 
-Run `baseline-001` trong ZIP được cung cấp có `is_mock=true`. Bản ghi T4 mẫu thể hiện 15 mục Semantic Scholar, 10 arXiv ID duy nhất và 10 reference đủ metadata; đây là dữ liệu mô phỏng dùng kiểm tra luồng, không phải kết quả crawl thật. Các lần truy vấn trực tiếp được ghi trong README dự án có trước thay đổi schema raw 1.2; không dùng chúng làm xác nhận thực nghiệm mới cho phiên bản hiện tại.
+Trong bản chạy thật `m1-colab-man-nhi-01` (`is_mock=false`) trên dải `2501.12642` – `2501.17641`, `prepare_mannhi.py` trích xuất được **4.994 bản ghi References** (toàn bộ đều có `data.complete=true`), với tổng hợp như sau:
 
+| Chỉ số | Giá trị | Ghi chú |
+|---|---:|---|
+| Số bài có kết quả References | 4.994 | Trên 5.000 bài của Mẫn Nhi (6 bài chưa có bản ghi references) |
+| Trạng thái `success` (có arXiv refs) | 3.538 | Chiếm **70,85%** số bài đã lấy |
+| Trạng thái `empty` (0 arXiv refs) | 1.456 | Chiếm **29,15%** (không có ID arXiv hợp lệ sau lọc) |
+| Tổng mục thô Semantic Scholar (`s2_reference_count`) | 172.483 | Giữ nguyên trước khi lọc/khử trùng |
+| Tổng arXiv ID duy nhất (`arxiv_reference_count`) | 78.635 | Chiếm 45,59% tổng mục thô từ S2 |
+| Số arXiv refs đủ 4 trường metadata | 78.635 | Đạt **100,00%** đầy đủ ngày nộp v1 |
 
-## 8. Biểu đồ từ run được cung cấp
+Trong nhóm 3.538 bài `success`, số arXiv references trên mỗi bài dao động từ **1** đến **252** (trung vị **16**, trung bình **22,23**, phân vị 95% là **66**).
 
-Dữ liệu hiện có trong ZIP là `baseline-001` với `is_mock=true`. Sau khi chạy script chuẩn bị dữ liệu và sinh SVG, hai biểu đồ sau minh họa đúng bản ghi mock hiện có; không được dùng chúng như kết quả crawl thật.
+## 8. Biểu đồ từ dữ liệu thật
+
+Hai biểu đồ dưới đây được sinh tự động bởi `book/lib/mannhi_charts.py` từ `data/mannhi/references_per_paper.csv` (đã lọc chỉ giữ 4.994 dòng `is_mock=False`):
 
 ![Số reference arXiv trên mỗi bài](../figures/references-count.svg)
 

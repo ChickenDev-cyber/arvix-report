@@ -78,3 +78,29 @@ Không được gộp `partial` với `success`: một Result `partial` có th�
 ## 6. Phạm vi và tính trung thực của số liệu
 
 Số liệu trong báo cáo phải gắn với `run_id`, owner và cờ `is_mock`. Các file `statistics/*.json`, `benchmarks/*.json` và `runs/<run_id>/accepted_results.jsonl` trong bản repository được cung cấp có chứa dữ liệu mẫu `is_mock=true`; chúng hữu ích để kiểm tra luồng và dựng biểu đồ, nhưng không đại diện cho kết quả crawl thật toàn dải. Chỉ thay nhãn thành dữ liệu thật khi manifest của run xác nhận `is_mock=false`.
+
+## 7. Kết quả dữ liệu thật toàn nhóm (25.000 bài báo)
+
+Bảng dưới đây tổng hợp kết quả dữ liệu Milestone 1 cuối cùng của cả 5 thành viên (tổng nguồn từ `data/mannhi/m1_final_25k_summary.json`, `is_mock=false`), phản ánh đầy đủ phạm vi **25.000 bài báo** và **40.896 phiên bản** (trung bình `1,636` phiên bản/bài; `42,64%` bài có $\ge 2$ phiên bản):
+
+| Owner | Dải ID | Số bài | Phiên bản khai báo | Bài có venue | Bài có arXiv refs | Tổng arXiv refs | Refs đủ metadata |
+|---|---|---:|---:|---:|---:|---:|---:|
+| `hoang` | `2503.06914` – `2503.11913` | 5.000 | 8.384 | 820 (16,40%) | 4.384 (87,68%) | 108.616 | 107.756 (99,21%) |
+| `huynh-nhi` | `2409.03594` – `2409.08593` | 5.000 | 8.268 | 960 (19,20%) | 4.306 (86,12%) | 91.161 | 91.031 (99,86%) |
+| `khang` | `2506.20788` – `2507.01658` | 5.000 | 7.933 | 767 (15,34%) | 4.325 (86,50%) | 96.537 | 96.537 (100,00%) |
+| `man-nhi` | `2501.12642` – `2501.17641` | 5.000 | 8.251 | 918 (18,36%) | 3.538 (70,76%) | 78.635 | 78.635 (100,00%) |
+| `trong` | `2504.17523` – `2505.00665` | 5.000 | 8.060 | 819 (16,38%) | 4.325 (86,50%) | 91.814 | 91.750 (99,93%) |
+| **Toàn nhóm** | **5 dải** | **25.000** | **40.896** | **4.284 (17,14%)** | **20.878 (83,51%)** | **466.763** | **465.709 (99,77%)** |
+
+### 7.1. Ghi nhận riêng trên tập `m1-colab-man-nhi-01`
+
+Trên bản chạy thật `m1-colab-man-nhi-01` (`is_mock=false`), các công đoạn của Mẫn Nhi đạt:
+- **Discovery:** `5.000/5.000` bài `found` (`0` `excluded`, `0` `unresolved`) trong `168,71` giây.
+- **Metadata:** `5.000` bản ghi (`4.998` `success`, `2` `partial`).
+- **Sources:** `8.199` phiên bản đã xử lý (`7.590` `success`, `609` `unsupported` không có TeX).
+- **References:** `4.994` bài có kết quả (`3.538` `success`, `1.456` `empty`, đều có `complete=true`), thu được `78.635` arXiv references với `100%` đủ metadata ngày nộp.
+
+### 7.2. Lưu ý về phạm vi benchmark
+
+Các bản ghi benchmark chụp ở giai đoạn trung gian (ngày 06/11/2026) có `cache_mode=mixed` và `exit_code=2` trước khi hoàn tất đợt chạy bù cuối cùng cho một số dải. Do đó, số đo hiệu năng trung gian không dùng để thay thế kết quả toàn dải cuối cùng ở bảng trên.
+

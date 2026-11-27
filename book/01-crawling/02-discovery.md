@@ -81,7 +81,18 @@ Trong `Result.data`, các trường chính là `papers`, `unresolved_ids`, `excl
 
 Trong repository hiện tại, Discovery thực tế dùng **arXiv Atom API**. OAI-PMH arXivRaw được dùng ở T2 để lấy metadata và lịch sử phiên bản, không phải một phương án Discovery song song. Không tìm thấy module tích hợp Kaggle trong source code được cung cấp, vì vậy báo cáo không khẳng định Kaggle đã được triển khai hoặc benchmark. Nếu cần trình bày so sánh các nguồn như một phần nghiên cứu, phải ghi rõ đó là đánh giá thiết kế, không phải kết quả thực nghiệm của code hiện tại.
 
-## 6. Dữ liệu và biểu đồ
+## 6. Dữ liệu và biểu đồ từ run thật
 
-Script `scripts/prepare_mannhi.py` trích xuất các trường discovery có sẵn từ `accepted_results.jsonl` vào `data/mannhi/discovery.csv`. Với run mẫu cũ chỉ có summary thay vì toàn bộ `Result.data`, các cột chi tiết sẽ để trống; không được suy diễn số bài tìm được từ tổng số candidate. Bảng dải ID được sinh từ cấu hình đã xác nhận trong `config.py`.
+Script `scripts/prepare_mannhi.py` trích xuất toàn bộ kết quả Discovery từ `m1-colab-man-nhi-01/corpus/runs/m1-colab-man-nhi-01/accepted_results.jsonl` (`is_mock=false`) vào `data/mannhi/discovery.csv`. Kết quả thực nghiệm trên dải phân công của Mẫn Nhi (`2501.12642` – `2501.17641`):
+
+| Chỉ số | Giá trị | Ghi chú |
+|---|---:|---|
+| Số ID ứng viên (`candidate_count`) | 5.000 | Dải nội tháng `2025-01`, `inclusive=true` |
+| Số ID đã kiểm tra (`candidates_checked`) | 5.000 | Chia 50 batch (tối đa 100 ID/batch) |
+| Bài tìm thấy (`found`) | 5.000 | Tỷ lệ 100,00% |
+| Bài bị loại (`excluded_ids`) | 0 | Không có ID vắng mặt trong feed |
+| Bài chưa xác minh (`unresolved_ids`) | 0 | Toàn bộ feed hợp lệ và đầy đủ |
+| Thời gian thực thi | 168,71 giây | Trung bình ~3,37 giây/batch (bao gồm khoảng nghỉ 3 giây) |
+
+![Trạng thái xử lý Discovery](../figures/discovery-status.svg)
 

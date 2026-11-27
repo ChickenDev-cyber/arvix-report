@@ -1,0 +1,13 @@
+arxiv_id,citation_key,entry_type,title,authors,year,doi,journal,url
+2504.17523,ye2019privkv,inproceedings,PrivKV: Key-Value Data Collection with Local Differential Privacy,"[""Ye, Q."", ""Hu, H."", ""Meng, X."", ""Zheng, H""]",2019,,S\&P,
+2504.17523,gu2020pckv,inproceedings,PCKV: Locally Differentially Private Correlated Key-Value Data Collection with Optimized Utility,"[""Gu, Xiaolan"", ""Li, Ming"", ""Cheng, Yueqiang"", ""Xiong, Li"", ""Cao, Yang""]",2020,,USENIX Security,
+2504.17523,qin2016heavy,inproceedings,Heavy Hitter Estimation over Set-Valued Data with Local Differential Privacy,"[""Qin, Zhan"", ""Yang, Yin"", ""Yu, Ting"", ""Khalil, Issa"", ""Xiao, Xiaokui"", ""Ren, Kui""]",2016,,CCS,
+2504.17523,duchi2013local,inproceedings,Local privacy and statistical minimax rates,"[""Duchi, John C"", ""Jordan, Michael I"", ""Wainwright, Martin J""]",2013,,FOCS,
+2504.17523,erlingsson2014rappor,inproceedings,Rappor: Randomized aggregatable privacy-preserving ordinal response,"[""Erlingsson, Úlfar"", ""Pihur, Vasyl"", ""Korolova, Aleksandra""]",2014,,CCS,
+2504.17523,ye2018optimal,article,Optimal schemes for discrete distribution estimation under locally differential privacy,"[""Ye, Min"", ""Barg, Alexander""]",2018,,IEEE Transactions on Information Theory,
+2504.17523,bassily2015local,inproceedings,"Local, private, efficient protocols for succinct histograms","[""Bassily, Raef"", ""Smith, Adam""]",2015,,STOC,
+2504.17523,kairouz2014extremal,inproceedings,Extremal mechanisms for local differential privacy,"[""Kairouz, Peter"", ""Oh, Sewoong"", ""Viswanath, Pramod""]",2014,,NIPS,
+2504.17523,duchi2014privacy,article,Privacy Aware Learning,"[""Duchi, John C"", ""Jordan, Michael I"", ""Wainwright, Martin J""]",2014,,Journal of the ACM,
+2504.17523,warner1965randomized,article,Randomized response: A survey technique for eliminating evasive answer bias,"[""Warner, Stanley L""]",1965,,Journal of the American Statistical Association,
+2504.17523,wang2018locally,inproceedings,Locally Differentially Private Frequent Itemset Mining,"[""Wang, Tianhao"", ""Li, Ninghui"", ""Jha, Somesh""]",2018,,S\&P,
+2504.17523,wang2019locally,article,Locally differentially private heavy hitter identification,"[""Wang, Tianhao"", ""Li, Ninghui"", ""Jha, Somesh""]",2019,,IEEE Transactions on Dependable and Secure Computing,

@@ -1,10 +1,10 @@
 # See docs at: https://mystmd.org/guide/frontmatter
 version: 1
 project:
-  id: arvix-report-m1-m2
-  title: "Báo cáo Khai thác & Phân tích Dữ liệu arXiv"
-  subtitle: "Milestone 1: Crawling & Milestone 2: Parsing — HCMUS Nhập môn Khoa học Dữ liệu"
-  description: "Báo cáo toàn diện hệ thống thu thập bài báo arXiv và phân tích cú pháp phân cấp TeX/BibTeX."
+  id: arvix-report-m1-m2-m3
+  title: "Báo cáo Khai thác, Phân tích & Đối sánh Dữ liệu arXiv"
+  subtitle: "Milestone 1: Crawling, Milestone 2: Parsing & Milestone 3: Matching — HCMUS Nhập môn Khoa học Dữ liệu"
+  description: "Báo cáo toàn diện hệ thống thu thập 25.000 bài báo arXiv, phân tích cú pháp phân cấp TeX/BibTeX và đối sánh thực thể trích dẫn theo nguyên tắc Zero External Knowledge."
   authors:
     - name: "Huy Hoàng"
     - name: "Mẫn Nhi"
@@ -51,6 +51,22 @@ project:
           title: "2.4 Benchmark"
         - file: book/02-parsing/05-bang-du-lieu.md
           title: "2.5 Bảng dữ liệu (elements, hierarchy, bibtex)"
+    - title: "Chương 3 — Milestone 3: Matching"
+      children:
+        - file: book/03-matching/index.md
+          title: "Giới thiệu Chương 3"
+        - file: book/03-matching/01-data-prep.md
+          title: "3.1 Chuẩn bị & Kiểm kê dữ liệu"
+        - file: book/03-matching/02-labeling.md
+          title: "3.2 Gán nhãn thủ công & tự động"
+        - file: book/03-matching/03-splitting-export.md
+          title: "3.3 Phân chia tập & Đóng gói xuất bản"
+        - file: book/03-matching/04-features-modeling.md
+          title: "3.4 Trích xuất đặc trưng & Mô hình xếp hạng"
+        - file: book/03-matching/05-evaluation-validation.md
+          title: "3.5 Đánh giá MRR@5 & Kiểm định toàn vẹn"
+        - file: book/03-matching/06-error-analysis.md
+          title: "3.6 Giải phẫu lỗi & Hướng phát triển"
 
 site:
   template: book-theme

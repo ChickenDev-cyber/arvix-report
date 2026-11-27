@@ -1,0 +1,13 @@
+arxiv_id,ref_arxiv_id,ref_title,ref_authors,ref_submission_date,ref_s2_id
+2504.17523,0803.0924,What Can We Learn Privately?,"[""S. Kasiviswanathan"", ""Ho-Min K. Lee"", ""Kobbi Nissim"", ""Sofya Raskhodnikova"", ""Adam D. Smith""]",2008-03-06T17:50:07Z,1311443061e0b387fceee95f813022ab5e3c273d
+2504.17523,1210.2085,Privacy Aware Learning,"[""John C. Duchi"", ""Michael I. Jordan"", ""M. Wainwright""]",2012-10-07T18:27:03Z,39ec863025e8d1c1bbe78517abfc2fb6c5e196bd
+2504.17523,1407.1338,Extremal Mechanisms for Local Differential Privacy,"[""Peter Kairouz"", ""Sewoong Oh"", ""P. Viswanath""]",2014-07-04T22:49:53Z,b6b1d641a832d54144653493e3f364fbec040c25
+2504.17523,1407.6981,RAPPOR: Randomized Aggregatable Privacy-Preserving Ordinal Response,"[""Ú. Erlingsson"", ""Vasyl Pihur"", ""A. Korolova""]",2014-07-25T17:31:17Z,94168692edb14b8b15f16ec0d793d22d3137be48
+2504.17523,1504.04686,"Local, Private, Efficient Protocols for Succinct Histograms","[""Raef Bassily"", ""Adam D. Smith""]",2015-04-18T06:23:34Z,11f5b63c3d47acf6c161be6d6bdfbc8906291863
+2504.17523,1604.02390,Minimax Optimal Procedures for Locally Private Estimation,"[""John C. Duchi"", ""Michael I. Jordan"", ""M. Wainwright""]",2016-04-08T16:24:18Z,27fb73cd9790af5c9130c0184e7f700d3bc0f422
+2504.17523,1702.00610,Optimal Schemes for Discrete Distribution Estimation Under Locally Differential Privacy,"[""Min Ye"", ""A. Barg""]",2017-02-02T10:37:55Z,145258380c5173e2572284fc90c97a5c3ad132b8
+2504.17523,1707.04982,Practical Locally Private Heavy Hitters,"[""Raef Bassily"", ""Kobbi Nissim"", ""Uri Stemmer"", ""Abhradeep Thakurta""]",2017-07-17T02:34:55Z,ccf35572bff5894ed5594a747c1b9a0f158ab8fd
+2504.17523,1708.06674,Locally Differentially Private Heavy Hitter Identification,"[""Tian-Hao Wang"", ""Ning-Hui Li"", ""S. Jha""]",2017-08-22T15:27:58Z,23feaf87ea8e84e51de8a4824c636a15580826fc
+2504.17523,1711.02952,Marginal Release Under Local Differential Privacy,"[""Graham Cormode"", ""Tejas D. Kulkarni"", ""Divesh Srivastava""]",2017-11-08T14:15:53Z,c904db06ccd8288157513e3e4c75b6692a16740f
+2504.17523,1711.04740,Heavy Hitters and the Structure of Local Privacy,"[""Mark Bun"", ""Jelani Nelson"", ""Uri Stemmer""]",2017-11-13T18:12:51Z,3217beb73a5b60c1a995b2d89b5983016c3c63de
+2504.17523,1712.01524,Collecting Telemetry Data Privately,"[""Bo-Lin Ding"", ""Janardhan Kulkarni"", ""S. Yekhanin""]",2017-12-05T08:32:18Z,5bd910767e2960bdeafbcff31b8c672ae5753039

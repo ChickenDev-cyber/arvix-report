@@ -1,0 +1,861 @@
+{
+  "experiment": "m1_s2_batch_5000",
+  "totals": {
+    "owners_count": 5,
+    "publications": 25000,
+    "papers_complete_assignment": 24732,
+    "paper_success_rate_assignment": 0.98928,
+    "versions_expected": 41002,
+    "versions_covered": 40822,
+    "versions_unsupported": 2754,
+    "versions_unresolved": 180,
+    "references_fully_fetched_papers": 24911,
+    "references_arxiv_entries": 466881,
+    "references_complete_arxiv_entries": 466778,
+    "http_audit_total_all_owners": 74323,
+    "active_wall_hours_range": [
+      16.57,
+      22.77
+    ],
+    "sessions_count_range": [
+      11,
+      51
+    ],
+    "http_audit_total_range": [
+      14470,
+      15109
+    ]
+  },
+  "methodology_notes": {
+    "per_version_vs_per_paper": "per_version_bytes reports schema12 means per measured source version; per_paper_sum_bytes reports assignment.source_sizes means summing all versions per publication.",
+    "assignment_vs_schema12_complete": "assignment.papers_complete treats unsupported/PDF-only versions as covered; schema12.papers_complete counts only papers whose versions all succeeded with TeX sources.",
+    "khang_schema12_note": "khang zip has validation.valid=false and lacks assignment-statistics-schema12.json, so schema12 and per_version_bytes are explicitly null."
+  },
+  "by_owner": {
+    "huynh-nhi": {
+      "run_id": "m1-bench-huynh-nhi-batch-5000",
+      "active_wall_seconds": 66780.8,
+      "active_wall_hours": 18.55,
+      "span_hours": 27.92,
+      "sessions_count": 14,
+      "events_count": 18418,
+      "first_ts": "2026-11-23T14:56:15.180148+00:00",
+      "last_ts": "2026-11-24T18:51:37.038037+00:00",
+      "steps": {
+        "discovery|success": 1,
+        "metadata|success": 4999,
+        "sources|success": 7701,
+        "sources|unsupported": 553,
+        "sources|not_found": 70,
+        "sources|failed": 11,
+        "metadata|partial": 2,
+        "references|failed": 27,
+        "references|success": 4309,
+        "references|partial": 49,
+        "references|empty": 683,
+        "references|not_found": 13
+      },
+      "dur_sum_by_step_s": {
+        "discovery": 167.9,
+        "metadata": 8846.3,
+        "sources": 46336.1,
+        "references": 1368137.3
+      },
+      "http_audit_total": 14470,
+      "http_audit_elapsed_s": 5810.5,
+      "http_audit_counts": {
+        "arxiv_discovery|GET|200": 50,
+        "arxiv_metadata|GET|200": 5001,
+        "arxiv_source|GET|200": 8356,
+        "arxiv_source|GET|404": 70,
+        "arxiv_metadata|GET|429": 4,
+        "arxiv_source|GET|429": 29,
+        "semantic_scholar|POST|429": 90,
+        "semantic_scholar|POST|200": 54,
+        "arxiv_dates|GET|None": 5,
+        "arxiv_dates|GET|200": 714,
+        "arxiv_dates|GET|429": 20,
+        "semantic_scholar|GET|429": 47,
+        "semantic_scholar|GET|404": 13,
+        "semantic_scholar|GET|200": 16,
+        "semantic_scholar|POST|400": 1
+      },
+      "execution": {
+        "format_version": 1,
+        "max_attempt_id": 18418,
+        "pause_reason": null,
+        "run_id": "m1-bench-huynh-nhi-batch-5000",
+        "run_state": "finished"
+      },
+      "validation": {
+        "issues": [],
+        "valid": true
+      },
+      "quality_valid": false,
+      "zip_bytes": 806754175,
+      "assignment": {
+        "publications": 5000,
+        "papers_complete": 4964,
+        "paper_success_rate": 0.9928,
+        "versions": {
+          "expected": 8283,
+          "covered": 8254,
+          "unsupported": 553,
+          "unresolved": 29,
+          "papers_missing_version_history": 0
+        },
+        "source_sizes": {
+          "unit": "uncompressed bytes; sum all versions per publication",
+          "sample_publications": 4538,
+          "excluded_publications": 462,
+          "mean_before_filter_bytes": 9342313.598942265,
+          "mean_retained_bytes": 524733.4497576024
+        },
+        "references": {
+          "fully_fetched_papers": 4992,
+          "unfetched_or_partial_papers": 8,
+          "query_success_rate": 0.9984,
+          "total_raw_references_complete_lists": 204670,
+          "mean_all_references_per_fully_fetched_paper": 40.99959935897436,
+          "mean_arxiv_references_per_fully_fetched_paper": 18.293870192307693,
+          "metadata_macro_success_rate": 1.0,
+          "metadata_macro_sample_papers": 4309,
+          "metadata_micro_success_rate": 1.0,
+          "metadata_complete_arxiv_entries": 91323,
+          "metadata_arxiv_entries_denominator": 91323,
+          "metadata_policy": "Required arXiv reference fields; macro excludes empty arXiv sets; micro pools entries"
+        }
+      },
+      "per_paper_sum_bytes": {
+        "unit": "uncompressed bytes; sum all versions per publication",
+        "sample_publications": 4538,
+        "excluded_publications": 462,
+        "mean_before_filter_bytes": 9342313.598942265,
+        "mean_retained_bytes": 524733.4497576024,
+        "reduction_rate": 0.943833
+      },
+      "schema12": {
+        "papers_discovered": 5000,
+        "metadata_complete_papers": 4999,
+        "papers_complete": 4532,
+        "paper_success_rate": 0.9064,
+        "source_versions_expected": 8283,
+        "source_versions_success": 7701,
+        "source_versions_unsupported": 553,
+        "source_versions_unresolved": 29,
+        "references_fully_fetched_papers": 4992,
+        "references_query_success_rate": 0.9984,
+        "references_metadata_complete_papers": 4992,
+        "metadata_success_rate": 0.9998,
+        "source_success_rate": 0.9297356030423759,
+        "references_arxiv_total": 91323,
+        "references_complete_total": 91323,
+        "reference_metadata_success_rate": 1.0,
+        "mean_arxiv_references_per_paper": 18.293870192307693,
+        "source_size_sample_count": 7701,
+        "mean_extracted_bytes_before_filter": 5541619.803142449,
+        "mean_retained_source_bytes": 310036.8731333593
+      },
+      "schema12_note": null,
+      "per_version_bytes": {
+        "unit": "uncompressed bytes per measured version",
+        "sample_versions": 7701,
+        "mean_before_filter_bytes": 5541619.803142449,
+        "mean_retained_bytes": 310036.8731333593,
+        "reduction_rate": 0.944053
+      },
+      "benchmark_last_session": {
+        "run_id": "m1-bench-huynh-nhi-batch-5000",
+        "cache_mode": "mixed",
+        "scope": {
+          "discovery_complete": true,
+          "owner_count": 1,
+          "paper_count": 5000,
+          "ranges": [
+            {
+              "end_id": 8593,
+              "end_month": "2024-09",
+              "inclusive": true,
+              "owner": "huynh-nhi",
+              "start_id": 3594,
+              "start_month": "2024-09"
+            }
+          ],
+          "versions_complete": true
+        },
+        "wall_seconds": 35090.1821,
+        "peak_ram_bytes": 1913815040,
+        "mean_ram_bytes": 195300598,
+        "peak_disk_bytes": 3328576351,
+        "final_output_bytes": 3321182177,
+        "exit_code": 1,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        }
+      }
+    },
+    "man-nhi": {
+      "run_id": "m1-bench-man-nhi-batch-5000",
+      "active_wall_seconds": 74571.2,
+      "active_wall_hours": 20.71,
+      "span_hours": 51.07,
+      "sessions_count": 51,
+      "events_count": 18738,
+      "first_ts": "2026-11-22T15:55:43.070529+00:00",
+      "last_ts": "2026-11-24T18:59:47.135133+00:00",
+      "steps": {
+        "discovery|success": 1,
+        "metadata|success": 4998,
+        "sources|unsupported": 610,
+        "sources|success": 7614,
+        "sources|not_found": 342,
+        "metadata|partial": 14,
+        "sources|failed": 41,
+        "references|empty": 1450,
+        "references|success": 3545,
+        "references|failed": 54,
+        "references|partial": 56,
+        "references|not_found": 13
+      },
+      "dur_sum_by_step_s": {
+        "discovery": 168.5,
+        "metadata": 10126.5,
+        "sources": 53712.8,
+        "references": 1359929.4
+      },
+      "http_audit_total": 14950,
+      "http_audit_elapsed_s": 8066.0,
+      "http_audit_counts": {
+        "arxiv_discovery|GET|200": 50,
+        "arxiv_metadata|GET|200": 5012,
+        "arxiv_source|GET|200": 8352,
+        "arxiv_source|GET|404": 342,
+        "arxiv_source|GET|429": 88,
+        "arxiv_metadata|GET|None": 14,
+        "semantic_scholar|POST|429": 165,
+        "semantic_scholar|POST|200": 67,
+        "arxiv_dates|GET|200": 651,
+        "semantic_scholar|GET|429": 105,
+        "semantic_scholar|GET|200": 25,
+        "semantic_scholar|GET|404": 14,
+        "arxiv_dates|GET|None": 21,
+        "arxiv_dates|GET|429": 33,
+        "semantic_scholar|POST|400": 10,
+        "semantic_scholar|GET|504": 1
+      },
+      "execution": {
+        "format_version": 1,
+        "max_attempt_id": 18739,
+        "pause_reason": null,
+        "run_id": "m1-bench-man-nhi-batch-5000",
+        "run_state": "finished"
+      },
+      "validation": {
+        "issues": [],
+        "valid": true
+      },
+      "quality_valid": null,
+      "zip_bytes": 925428126,
+      "assignment": {
+        "publications": 5000,
+        "papers_complete": 4951,
+        "paper_success_rate": 0.9902,
+        "versions": {
+          "expected": 8274,
+          "covered": 8224,
+          "unsupported": 610,
+          "unresolved": 50,
+          "papers_missing_version_history": 0
+        },
+        "source_sizes": {
+          "unit": "uncompressed bytes; sum all versions per publication",
+          "sample_publications": 4477,
+          "excluded_publications": 523,
+          "mean_before_filter_bytes": 8816265.512843423,
+          "mean_retained_bytes": 578982.3450971632
+        },
+        "references": {
+          "fully_fetched_papers": 4995,
+          "unfetched_or_partial_papers": 5,
+          "query_success_rate": 0.999,
+          "total_raw_references_complete_lists": 172828,
+          "mean_all_references_per_fully_fetched_paper": 34.6002002002002,
+          "mean_arxiv_references_per_fully_fetched_paper": 15.76996996996997,
+          "metadata_macro_success_rate": 1.0,
+          "metadata_macro_sample_papers": 3545,
+          "metadata_micro_success_rate": 1.0,
+          "metadata_complete_arxiv_entries": 78771,
+          "metadata_arxiv_entries_denominator": 78771,
+          "metadata_policy": "Required arXiv reference fields; macro excludes empty arXiv sets; micro pools entries"
+        }
+      },
+      "per_paper_sum_bytes": {
+        "unit": "uncompressed bytes; sum all versions per publication",
+        "sample_publications": 4477,
+        "excluded_publications": 523,
+        "mean_before_filter_bytes": 8816265.512843423,
+        "mean_retained_bytes": 578982.3450971632,
+        "reduction_rate": 0.934328
+      },
+      "schema12": {
+        "papers_discovered": 5000,
+        "metadata_complete_papers": 4998,
+        "papers_complete": 4469,
+        "paper_success_rate": 0.8938,
+        "source_versions_expected": 8274,
+        "source_versions_success": 7614,
+        "source_versions_unsupported": 610,
+        "source_versions_unresolved": 50,
+        "references_fully_fetched_papers": 4995,
+        "references_query_success_rate": 0.999,
+        "references_metadata_complete_papers": 4995,
+        "metadata_success_rate": 0.9996,
+        "source_success_rate": 0.9202320522117476,
+        "references_arxiv_total": 78771,
+        "references_complete_total": 78771,
+        "reference_metadata_success_rate": 1.0,
+        "mean_arxiv_references_per_paper": 15.76996996996997,
+        "source_size_sample_count": 7614,
+        "mean_extracted_bytes_before_filter": 5235172.7499343315,
+        "mean_retained_source_bytes": 342909.05043341214
+      },
+      "schema12_note": null,
+      "per_version_bytes": {
+        "unit": "uncompressed bytes per measured version",
+        "sample_versions": 7614,
+        "mean_before_filter_bytes": 5235172.7499343315,
+        "mean_retained_bytes": 342909.05043341214,
+        "reduction_rate": 0.934499
+      },
+      "benchmark_last_session": {
+        "run_id": "m1-bench-man-nhi-batch-5000",
+        "cache_mode": "mixed",
+        "scope": {
+          "discovery_complete": true,
+          "owner_count": 1,
+          "paper_count": 5000,
+          "ranges": [
+            {
+              "end_id": 17641,
+              "end_month": "2025-01",
+              "inclusive": true,
+              "owner": "man-nhi",
+              "start_id": 12642,
+              "start_month": "2025-01"
+            }
+          ],
+          "versions_complete": true
+        },
+        "wall_seconds": 64189.74,
+        "peak_ram_bytes": 4705173504,
+        "mean_ram_bytes": 706673557,
+        "peak_disk_bytes": 3840003566,
+        "final_output_bytes": 3840003566,
+        "exit_code": 2,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        }
+      }
+    },
+    "hoang": {
+      "run_id": "m1-bench-hoang-batch-5000",
+      "active_wall_seconds": 81965.3,
+      "active_wall_hours": 22.77,
+      "span_hours": 40.44,
+      "sessions_count": 28,
+      "events_count": 18592,
+      "first_ts": "2026-11-23T03:56:59.605781+00:00",
+      "last_ts": "2026-11-24T20:23:33.934719+00:00",
+      "steps": {
+        "discovery|success": 1,
+        "metadata|success": 5000,
+        "sources|success": 7910,
+        "sources|unsupported": 475,
+        "sources|not_found": 102,
+        "sources|failed": 50,
+        "references|success": 4360,
+        "references|partial": 60,
+        "references|empty": 600,
+        "references|failed": 26,
+        "references|not_found": 8
+      },
+      "dur_sum_by_step_s": {
+        "discovery": 657.8,
+        "metadata": 9782.6,
+        "sources": 64609.4,
+        "references": 1059979.2
+      },
+      "http_audit_total": 14875,
+      "http_audit_elapsed_s": 8590.4,
+      "http_audit_counts": {
+        "arxiv_discovery|GET|None": 2,
+        "arxiv_discovery|GET|429": 3,
+        "arxiv_discovery|GET|200": 50,
+        "arxiv_metadata|GET|200": 5000,
+        "arxiv_source|GET|200": 8604,
+        "arxiv_source|GET|404": 102,
+        "arxiv_source|GET|429": 86,
+        "arxiv_metadata|GET|None": 5,
+        "arxiv_metadata|GET|429": 4,
+        "semantic_scholar|POST|429": 109,
+        "semantic_scholar|POST|200": 53,
+        "arxiv_dates|GET|200": 758,
+        "arxiv_dates|GET|None": 17,
+        "arxiv_dates|GET|429": 28,
+        "semantic_scholar|GET|429": 28,
+        "semantic_scholar|GET|200": 18,
+        "semantic_scholar|GET|404": 8
+      },
+      "execution": {
+        "format_version": 1,
+        "max_attempt_id": 18595,
+        "pause_reason": null,
+        "run_id": "m1-bench-hoang-batch-5000",
+        "run_state": "finished"
+      },
+      "validation": {
+        "issues": [],
+        "valid": true
+      },
+      "quality_valid": false,
+      "zip_bytes": 1016041081,
+      "assignment": {
+        "publications": 5000,
+        "papers_complete": 4938,
+        "paper_success_rate": 0.9876,
+        "versions": {
+          "expected": 8407,
+          "covered": 8385,
+          "unsupported": 475,
+          "unresolved": 22,
+          "papers_missing_version_history": 0
+        },
+        "source_sizes": {
+          "unit": "uncompressed bytes; sum all versions per publication",
+          "sample_publications": 4628,
+          "excluded_publications": 372,
+          "mean_before_filter_bytes": 11488754.062878134,
+          "mean_retained_bytes": 683658.9036300778
+        },
+        "references": {
+          "fully_fetched_papers": 4970,
+          "unfetched_or_partial_papers": 30,
+          "query_success_rate": 0.994,
+          "total_raw_references_complete_lists": 216484,
+          "mean_all_references_per_fully_fetched_paper": 43.55814889336016,
+          "mean_arxiv_references_per_fully_fetched_paper": 21.764587525150905,
+          "metadata_macro_success_rate": 0.998800029908715,
+          "metadata_macro_sample_papers": 4370,
+          "metadata_micro_success_rate": 0.999057039844689,
+          "metadata_complete_arxiv_entries": 108068,
+          "metadata_arxiv_entries_denominator": 108170,
+          "metadata_policy": "Required arXiv reference fields; macro excludes empty arXiv sets; micro pools entries"
+        }
+      },
+      "per_paper_sum_bytes": {
+        "unit": "uncompressed bytes; sum all versions per publication",
+        "sample_publications": 4628,
+        "excluded_publications": 372,
+        "mean_before_filter_bytes": 11488754.062878134,
+        "mean_retained_bytes": 683658.9036300778,
+        "reduction_rate": 0.940493
+      },
+      "schema12": {
+        "papers_discovered": 5000,
+        "metadata_complete_papers": 5000,
+        "papers_complete": 4588,
+        "paper_success_rate": 0.9176,
+        "source_versions_expected": 8407,
+        "source_versions_success": 7910,
+        "source_versions_unsupported": 475,
+        "source_versions_unresolved": 22,
+        "references_fully_fetched_papers": 4970,
+        "references_query_success_rate": 0.994,
+        "references_metadata_complete_papers": 4960,
+        "metadata_success_rate": 1.0,
+        "source_success_rate": 0.9408825978351374,
+        "references_arxiv_total": 108170,
+        "references_complete_total": 108068,
+        "reference_metadata_success_rate": 0.999057039844689,
+        "mean_arxiv_references_per_paper": 21.764587525150905,
+        "source_size_sample_count": 7910,
+        "mean_extracted_bytes_before_filter": 6775423.640581543,
+        "mean_retained_source_bytes": 407109.78343868523
+      },
+      "schema12_note": null,
+      "per_version_bytes": {
+        "unit": "uncompressed bytes per measured version",
+        "sample_versions": 7910,
+        "mean_before_filter_bytes": 6775423.640581543,
+        "mean_retained_bytes": 407109.78343868523,
+        "reduction_rate": 0.939914
+      },
+      "benchmark_last_session": {
+        "run_id": "m1-bench-hoang-batch-5000",
+        "cache_mode": "mixed",
+        "scope": {
+          "discovery_complete": true,
+          "owner_count": 1,
+          "paper_count": 5000,
+          "ranges": [
+            {
+              "end_id": 11913,
+              "end_month": "2025-03",
+              "inclusive": true,
+              "owner": "hoang",
+              "start_id": 6914,
+              "start_month": "2025-03"
+            }
+          ],
+          "versions_complete": true
+        },
+        "wall_seconds": 12194.8666,
+        "peak_ram_bytes": 2179383296,
+        "mean_ram_bytes": 252402789,
+        "peak_disk_bytes": 4283311188,
+        "final_output_bytes": 4283311188,
+        "exit_code": 1,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        }
+      }
+    },
+    "trong": {
+      "run_id": "m1-bench-trong-batch-5000",
+      "active_wall_seconds": 60091.6,
+      "active_wall_hours": 16.69,
+      "span_hours": 23.39,
+      "sessions_count": 11,
+      "events_count": 18169,
+      "first_ts": "2026-11-21T14:54:11.890899+00:00",
+      "last_ts": "2026-11-22T14:17:42.543806+00:00",
+      "steps": {
+        "discovery|success": 1,
+        "metadata|success": 5000,
+        "sources|success": 7469,
+        "sources|unsupported": 569,
+        "sources|not_found": 120,
+        "sources|failed": 9,
+        "references|success": 4315,
+        "references|empty": 666,
+        "references|failed": 13,
+        "references|not_found": 5,
+        "references|partial": 2
+      },
+      "dur_sum_by_step_s": {
+        "discovery": 2758.3,
+        "metadata": 7775.4,
+        "sources": 44037.2,
+        "references": 681065.2
+      },
+      "http_audit_total": 14919,
+      "http_audit_elapsed_s": 5570.4,
+      "http_audit_counts": {
+        "arxiv_discovery|GET|200": 832,
+        "arxiv_metadata|GET|200": 5000,
+        "arxiv_source|GET|200": 8070,
+        "arxiv_source|GET|404": 120,
+        "arxiv_source|GET|429": 16,
+        "semantic_scholar|POST|200": 51,
+        "semantic_scholar|GET|429": 25,
+        "semantic_scholar|GET|200": 19,
+        "arxiv_dates|GET|200": 719,
+        "semantic_scholar|POST|429": 62,
+        "semantic_scholar|GET|404": 5
+      },
+      "execution": {
+        "format_version": 1,
+        "max_attempt_id": 18170,
+        "pause_reason": null,
+        "run_id": "m1-bench-trong-batch-5000",
+        "run_state": "finished"
+      },
+      "validation": {
+        "issues": [],
+        "valid": true
+      },
+      "quality_valid": false,
+      "zip_bytes": 822487201,
+      "assignment": {
+        "publications": 5000,
+        "papers_complete": 4941,
+        "paper_success_rate": 0.9882,
+        "versions": {
+          "expected": 8081,
+          "covered": 8038,
+          "unsupported": 569,
+          "unresolved": 43,
+          "papers_missing_version_history": 0
+        },
+        "source_sizes": {
+          "unit": "uncompressed bytes; sum all versions per publication",
+          "sample_publications": 4529,
+          "excluded_publications": 471,
+          "mean_before_filter_bytes": 8706602.945241775,
+          "mean_retained_bytes": 514961.865312431
+        },
+        "references": {
+          "fully_fetched_papers": 4982,
+          "unfetched_or_partial_papers": 18,
+          "query_success_rate": 0.9964,
+          "total_raw_references_complete_lists": 204666,
+          "mean_all_references_per_fully_fetched_paper": 41.08109193095142,
+          "mean_arxiv_references_per_fully_fetched_paper": 18.426736250501808,
+          "metadata_macro_success_rate": 0.9999910886148142,
+          "metadata_macro_sample_papers": 4316,
+          "metadata_micro_success_rate": 0.9999891069911331,
+          "metadata_complete_arxiv_entries": 91801,
+          "metadata_arxiv_entries_denominator": 91802,
+          "metadata_policy": "Required arXiv reference fields; macro excludes empty arXiv sets; micro pools entries"
+        }
+      },
+      "per_paper_sum_bytes": {
+        "unit": "uncompressed bytes; sum all versions per publication",
+        "sample_publications": 4529,
+        "excluded_publications": 471,
+        "mean_before_filter_bytes": 8706602.945241775,
+        "mean_retained_bytes": 514961.865312431,
+        "reduction_rate": 0.940854
+      },
+      "schema12": {
+        "papers_discovered": 5000,
+        "metadata_complete_papers": 5000,
+        "papers_complete": 4508,
+        "paper_success_rate": 0.9016,
+        "source_versions_expected": 8081,
+        "source_versions_success": 7469,
+        "source_versions_unsupported": 569,
+        "source_versions_unresolved": 43,
+        "references_fully_fetched_papers": 4982,
+        "references_query_success_rate": 0.9964,
+        "references_metadata_complete_papers": 4981,
+        "metadata_success_rate": 1.0,
+        "source_success_rate": 0.9242667986635318,
+        "references_arxiv_total": 91802,
+        "references_complete_total": 91801,
+        "reference_metadata_success_rate": 0.9999891069911331,
+        "mean_arxiv_references_per_paper": 18.426736250501808,
+        "source_size_sample_count": 7469,
+        "mean_extracted_bytes_before_filter": 5342757.640246351,
+        "mean_retained_source_bytes": 314229.1174186638
+      },
+      "schema12_note": null,
+      "per_version_bytes": {
+        "unit": "uncompressed bytes per measured version",
+        "sample_versions": 7469,
+        "mean_before_filter_bytes": 5342757.640246351,
+        "mean_retained_bytes": 314229.1174186638,
+        "reduction_rate": 0.941186
+      },
+      "benchmark_last_session": {
+        "run_id": "m1-bench-trong-batch-5000",
+        "cache_mode": "mixed",
+        "scope": {
+          "discovery_complete": true,
+          "owner_count": 1,
+          "paper_count": 5000,
+          "ranges": [
+            {
+              "end_id": 665,
+              "end_month": "2025-05",
+              "inclusive": true,
+              "owner": "trong",
+              "start_id": 17523,
+              "start_month": "2025-04"
+            }
+          ],
+          "versions_complete": true
+        },
+        "wall_seconds": 10045.6385,
+        "peak_ram_bytes": 5434830848,
+        "mean_ram_bytes": 352741012,
+        "peak_disk_bytes": 3327290767,
+        "final_output_bytes": 3326667546,
+        "exit_code": 2,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605810176"
+        }
+      }
+    },
+    "khang": {
+      "run_id": "m1-bench-khang-batch-5000",
+      "active_wall_seconds": 59657.8,
+      "active_wall_hours": 16.57,
+      "span_hours": 73.12,
+      "sessions_count": 44,
+      "events_count": 18168,
+      "first_ts": "2026-11-24T08:23:24.416002+00:00",
+      "last_ts": "2026-11-27T09:30:33.847616+00:00",
+      "steps": {
+        "discovery|partial": 1,
+        "metadata|success": 4997,
+        "sources|unsupported": 547,
+        "sources|success": 7374,
+        "sources|failed": 4,
+        "metadata|partial": 14,
+        "sources|not_found": 150,
+        "discovery|success": 1,
+        "references|success": 4331,
+        "references|empty": 641,
+        "references|failed": 67,
+        "references|not_found": 41
+      },
+      "dur_sum_by_step_s": {
+        "discovery": 6245.3,
+        "metadata": 8922.7,
+        "sources": 34406.4,
+        "references": 1013437.9
+      },
+      "http_audit_total": 15109,
+      "http_audit_elapsed_s": 4381.3,
+      "http_audit_counts": {
+        "arxiv_discovery|GET|None": 9,
+        "arxiv_discovery|GET|200": 809,
+        "arxiv_discovery|GET|429": 18,
+        "arxiv_metadata|GET|200": 5011,
+        "arxiv_source|GET|200": 7949,
+        "arxiv_source|GET|429": 8,
+        "arxiv_source|GET|404": 150,
+        "semantic_scholar|POST|200": 70,
+        "semantic_scholar|GET|429": 140,
+        "arxiv_dates|GET|200": 741,
+        "semantic_scholar|POST|429": 138,
+        "semantic_scholar|GET|404": 41,
+        "semantic_scholar|GET|200": 17,
+        "semantic_scholar|GET|504": 1,
+        "arxiv_dates|GET|429": 2,
+        "arxiv_dates|GET|None": 5
+      },
+      "execution": {
+        "format_version": 1,
+        "max_attempt_id": 18123,
+        "pause_reason": null,
+        "run_id": "m1-bench-khang-batch-5000",
+        "run_state": "finished"
+      },
+      "validation": {
+        "issues": [
+          {
+            "arxiv_id": null,
+            "field": null,
+            "message": "Handoff is being updated; wait for a successful checkpoint",
+            "owner": "khang",
+            "step": "discovery",
+            "version": null
+          }
+        ],
+        "valid": false
+      },
+      "quality_valid": false,
+      "zip_bytes": 722527389,
+      "assignment": {
+        "publications": 5000,
+        "papers_complete": 4938,
+        "paper_success_rate": 0.9876,
+        "versions": {
+          "expected": 7957,
+          "covered": 7921,
+          "unsupported": 547,
+          "unresolved": 36,
+          "papers_missing_version_history": 0
+        },
+        "source_sizes": {
+          "unit": "uncompressed bytes; sum all versions per publication",
+          "sample_publications": 4535,
+          "excluded_publications": 465,
+          "mean_before_filter_bytes": 7561713.03969129,
+          "mean_retained_bytes": 359025.2624035281
+        },
+        "references": {
+          "fully_fetched_papers": 4972,
+          "unfetched_or_partial_papers": 28,
+          "query_success_rate": 0.9944,
+          "total_raw_references_complete_lists": 204144,
+          "mean_all_references_per_fully_fetched_paper": 41.05872888173773,
+          "mean_arxiv_references_per_fully_fetched_paper": 19.47204344328238,
+          "metadata_macro_success_rate": 1.0,
+          "metadata_macro_sample_papers": 4331,
+          "metadata_micro_success_rate": 1.0,
+          "metadata_complete_arxiv_entries": 96815,
+          "metadata_arxiv_entries_denominator": 96815,
+          "metadata_policy": "Required arXiv reference fields; macro excludes empty arXiv sets; micro pools entries"
+        }
+      },
+      "per_paper_sum_bytes": {
+        "unit": "uncompressed bytes; sum all versions per publication",
+        "sample_publications": 4535,
+        "excluded_publications": 465,
+        "mean_before_filter_bytes": 7561713.03969129,
+        "mean_retained_bytes": 359025.2624035281,
+        "reduction_rate": 0.952521
+      },
+      "schema12": null,
+      "schema12_note": "assignment-statistics-schema12.json absent in khang zip because validation.valid=false (Handoff is being updated; wait for a successful checkpoint)",
+      "per_version_bytes": null,
+      "benchmark_last_session": {
+        "run_id": "m1-bench-khang-batch-5000",
+        "cache_mode": "mixed",
+        "scope": {
+          "discovery_complete": true,
+          "owner_count": 1,
+          "paper_count": 5000,
+          "ranges": [
+            {
+              "end_id": 1658,
+              "end_month": "2025-07",
+              "inclusive": true,
+              "owner": "khang",
+              "start_id": 20788,
+              "start_month": "2025-06"
+            }
+          ],
+          "versions_complete": true
+        },
+        "wall_seconds": 1276.3814,
+        "peak_ram_bytes": 574324736,
+        "mean_ram_bytes": 555733266,
+        "peak_disk_bytes": 2719592269,
+        "final_output_bytes": 2719592269,
+        "exit_code": 1,
+        "environment": {
+          "os": "Linux 6.6.159+",
+          "os_version": "#1 SMP Thu Oct 22 03:07:54 UTC 2026",
+          "architecture": "x86_64",
+          "processor": "x86_64",
+          "cpu_count": "2",
+          "python_version": "3.13.18",
+          "python_implementation": "CPython",
+          "total_ram_bytes": "13605818368"
+        }
+      }
+    }
+  }
+}

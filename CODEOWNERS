@@ -7,16 +7,22 @@
 * @huynhhuyhoang2006@gmail.com
 
 # ------------------------------------------------------------------------------
-# 1. Các file hạ tầng dùng chung do Hoàng quản lý
+# 1. Hạ tầng dùng chung
 # ------------------------------------------------------------------------------
 myst.yml @huynhhuyhoang2006@gmail.com
 requirements.txt @huynhhuyhoang2006@gmail.com
 .github/ @huynhhuyhoang2006@gmail.com
 CODEOWNERS @huynhhuyhoang2006@gmail.com
-book/index.md @huynhhuyhoang2006@gmail.com
 book/lib/common.py @huynhhuyhoang2006@gmail.com
 
-# File riêng của Hoàng
+# Dữ liệu & helper dùng chung M1-M3 (Trọng)
+data/unified/ @ChickenDev-cyber
+book/lib/unified.py @ChickenDev-cyber
+book/index.md @ChickenDev-cyber
+
+# ------------------------------------------------------------------------------
+# 2. File riêng của Huy Hoàng
+# ------------------------------------------------------------------------------
 reqs/hoang.txt @huynhhuyhoang2006@gmail.com
 scripts/prepare_hoang.py @huynhhuyhoang2006@gmail.com
 data/hoang/ @huynhhuyhoang2006@gmail.com
@@ -25,9 +31,10 @@ book/01-crawling/06-thong-ke.md @huynhhuyhoang2006@gmail.com
 book/01-crawling/08-benchmark.md @huynhhuyhoang2006@gmail.com
 book/02-parsing/03-thong-ke.md @huynhhuyhoang2006@gmail.com
 book/02-parsing/04-benchmark.md @huynhhuyhoang2006@gmail.com
+book/03-matching/05-evaluation-validation.md @huynhhuyhoang2006@gmail.com
 
 # ------------------------------------------------------------------------------
-# 2. File riêng của Mẫn Nhi
+# 3. File riêng của Mẫn Nhi
 # ------------------------------------------------------------------------------
 reqs/mannhi.txt @NhiNgo49
 README.md @NhiNgo49
@@ -40,9 +47,10 @@ book/01-crawling/02-discovery.md @NhiNgo49
 book/01-crawling/05-references.md @NhiNgo49
 book/01-crawling/09-han-che.md @NhiNgo49
 book/02-parsing/01-phan-cap.md @NhiNgo49
+book/03-matching/02-labeling.md @NhiNgo49
 
 # ------------------------------------------------------------------------------
-# 3. File riêng của Huỳnh Nhi
+# 4. File riêng của Huỳnh Nhi
 # ------------------------------------------------------------------------------
 reqs/huynhnhi.txt @TrinhNhi3011
 scripts/prepare_huynhnhi.py @TrinhNhi3011
@@ -52,5 +60,22 @@ book/01-crawling/03-metadata.md @TrinhNhi3011
 book/01-crawling/04-nguon-tex.md @TrinhNhi3011
 book/01-crawling/07-chat-luong.md @TrinhNhi3011
 book/02-parsing/index.md @TrinhNhi3011
-book/02-parsing/02-chuan-hoa.md @TrinhNhi3011
 book/02-parsing/05-bang-du-lieu.md @TrinhNhi3011
+book/03-matching/01-data-prep.md @TrinhNhi3011
+
+# ------------------------------------------------------------------------------
+# 5. File riêng của Minh Trọng
+# ------------------------------------------------------------------------------
+reqs/trong.txt @ChickenDev-cyber
+book/lib/trong_* @ChickenDev-cyber
+book/03-matching/index.md @ChickenDev-cyber
+book/03-matching/03-splitting-export.md @ChickenDev-cyber
+
+# ------------------------------------------------------------------------------
+# 6. File riêng của Phúc Khang
+# ------------------------------------------------------------------------------
+reqs/khang.txt @khang1108
+book/lib/khang_* @khang1108
+book/02-parsing/02-chuan-hoa.md @khang1108
+book/03-matching/04-features-modeling.md @khang1108
+book/03-matching/06-error-analysis.md @khang1108

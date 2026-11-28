@@ -1,7 +1,12 @@
+---
+kernelspec:
+  name: python3
+  display_name: Python 3
+---
 # 2.1 Phân tích cú pháp phân cấp
 
 > **Người phụ trách:** Mẫn Nhi (`@NhiNgo49`)  
-> **Reviewer:** Hoàng (`huynhhuyhoang2006@gmail.com`)
+> **Reviewer:** Phúc Khang (`@khang1108`) / Huy Hoàng (`@huynhhuyhoang2006@gmail.com`)
 
 ---
 
@@ -26,17 +31,20 @@ Một phiên bản bài báo trên arXiv thường chứa nhiều file `.tex` (c
 
 ### 2.2. Xếp hạng ứng viên file gốc (`RootFinder`)
 
-Để chọn đúng file LaTeX chính mà arXiv dùng để biên dịch, `RootFinder` quét tất cả file `.tex` trên bản sao đã che comment (`mask_comments`), tìm những file có `\documentclass` rồi sắp xếp theo khóa ưu tiên `RootCandidate.sort_key()`:
+Để chọn đúng file LaTeX chính mà arXiv dùng để biên dịch, `RootFinder` quét tất cả file `.tex` trên bản sao đã che comment (`mask_comments`), tìm những file có `\documentclass` rồi sắp xếp theo khóa thứ tự từ điển 9 tiêu chí (`RootCandidate.sort_key()`) và chọn ứng viên nhỏ nhất:
 
-| Thứ tự ưu tiên | Tiêu chí | Ý nghĩa |
+$$K(p) = \bigl(k_1(p),\, k_2(p),\, k_3(p),\, k_4(p),\, k_5(p),\, k_6(p),\, -L_{\text{exp}}(p),\, d(p),\, p\bigr)$$
+
+| Thành phần | Tiêu chí (`0` ưu tiên hơn `1`) | Ý nghĩa |
 |---:|---|---|
-| 1 | Không phải tệp tạm trình soạn thảo | Loại các tệp như `_region_.tex` (AUCTeX) |
-| 2 | Có `\begin{document}` | Ưu tiên tài liệu hoàn chỉnh thay vì tệp cấu hình |
-| 3 | Không phải lớp `standalone` / `subfiles` | Tránh chọn nhầm hình vẽ hoặc chương lẻ |
-| 4 | Không bị tệp `.tex` khác `\input` / `\include` | File gốc là điểm vào cao nhất |
-| 5 | Nằm ở thư mục gốc phiên bản | Tránh chọn bản sao trong thư mục con (`OldFiles/`, `doc/`) |
-| 6 | Tên tệp phổ biến | Ưu tiên `main.tex`, `ms.tex`, `paper.tex`, `article.tex`, `manuscript.tex` |
-| 7 | Độ dài sau khi mở rộng (`merged_chars`) | Chọn tệp biên dịch ra nội dung đầy đủ nhất |
+| $k_1(p)$ | Không phải tệp tạm trình soạn thảo | Loại các tệp như `_region_.tex` (AUCTeX) |
+| $k_2(p)$ | Có `\begin{document}` | Ưu tiên tài liệu hoàn chỉnh thay vì tệp cấu hình |
+| $k_3(p)$ | Không phải lớp `standalone` / `subfiles` | Tránh chọn nhầm hình vẽ hoặc chương lẻ |
+| $k_4(p)$ | Không bị tệp `.tex` khác `\input` / `\include` | File gốc là điểm vào cao nhất |
+| $k_5(p)$ | Nằm ở thư mục gốc phiên bản (`"/" not in p`) | Tránh chọn bản sao trong thư mục con (`OldFiles/`, `doc/`) |
+| $k_6(p)$ | Tên tệp phổ biến | Ưu tiên `main.tex`, `ms.tex`, `paper.tex`, `article.tex`, `manuscript.tex` |
+| $-L_{\text{exp}}(p)$ | Âm độ dài sau mở rộng (`-merged_chars`) | Chọn tệp biên dịch ra nội dung đầy đủ nhất |
+| $d(p), p$ | Độ sâu thư mục và tên đường dẫn | Phá hòa tất định khi các tiêu chí trên bằng nhau |
 
 ### 2.3. Mở rộng đệ quy `\input` / `\include` (`IncludeExpander`)
 
@@ -119,60 +127,82 @@ Mỗi `VersionHierarchy` sinh ra bắt buộc đi qua hàm `validate_version_hie
 
 ---
 
-## 5. Kết quả thực nghiệm trên toàn bộ tập dữ liệu của Mẫn Nhi
+## 5. Hợp nhất thư mục tham khảo và 4 rào chắn an toàn (`arxiv_pipeline.bibtex`)
 
-Kết quả dưới đây được tổng hợp trực tiếp từ tệp `parsing.sqlite` chạy trên **toàn bộ 5.000 bài báo** thuộc dải phân công của Mẫn Nhi (`2501.12642` – `2501.17641`) trên Google Colab CPU (`is_mock = false`), xuất qua `data/mannhi/m2_hierarchy_summary.json` và `data/mannhi/m2_hierarchy_publications.csv`.
+Song song với việc dựng cây nội dung, module `arxiv_pipeline.bibtex` trích xuất tài liệu tham khảo từ ba nguồn (`extract_from_gathered_source`): các file `.bib` được khai báo, khối `\begin{thebibliography}` / `\thebibliography` nội tuyến (`\bibitem`), và khối AMSRefs (`\begin{biblist}` / `\bib`). Sau đó `unify_entries` hợp nhất qua mọi phiên bản của bài báo theo 4 rào chắn an toàn để chống trộn nhầm các tài liệu khác nhau:
 
-### 5.1. Tổng hợp độ phủ và quy mô cây phân cấp
-
-| Chỉ số | Giá trị | Ghi chú |
-|---|---:|---|
-| Số bài báo (`publications_meta`) | 5.000 | Đủ 100% dải `2501.12642` – `2501.17641` |
-| Tổng số phiên bản khai báo | 8.251 | 2.850 bài có 1 phiên bản; 2.150 bài có $\ge 2$ phiên bản |
-| Phiên bản dựng được cây (`document`) | 7.592 | Chiếm **92,01%** tổng số phiên bản |
-| Phiên bản rỗng (`empty_versions`) | 659 | Chiếm **7,99%**; thuộc 524 bài báo (456 bài rỗng toàn bộ phiên bản) |
-| Phần tử trước khử trùng lặp (`raw_element_count`) | 3.294.738 | Tổng trên toàn bộ các phiên bản |
-| Phần tử duy nhất sau gộp (`elements`) | 2.221.136 | Giảm **32,59%** nhờ khử trùng lặp giữa các phiên bản |
-| Tổng số cạnh cha–con (`hierarchy`) | 3.269.197 | Trung bình **430,61 cạnh** / phiên bản có cây |
-
-Chi tiết phân bố đầy đủ cả 11 loại phần tử (`ElementKind`) trong bảng `elements`:
-
-| Loại phần tử (`kind`) | Số lượng | Tỷ lệ |
-|---|---:|---:|
-| `sentence` | 1.728.599 | 77,82% |
-| `formula` | 200.626 | 9,03% |
-| `item` | 98.614 | 4,44% |
-| `figure` | 55.527 | 2,50% |
-| `subsection` | 44.019 | 1,98% |
-| `section` | 36.426 | 1,64% |
-| `itemize` | 15.616 | 0,70% |
-| `subsubsection` | 12.652 | 0,57% |
-| `enumerate` | 11.957 | 0,54% |
-| `paragraph` | 9.508 | 0,43% |
-| `document` | 7.592 | 0,34% |
-
-### 5.2. Ví dụ bản ghi thật từ bài `2501.12643`
-
-Trích xuất trực tiếp một số nút đầu tiên của bài `2501.12643` trong `parsing.sqlite`:
-
-| `element_id` | `kind` | Nội dung (`content`, rút gọn) |
-|---|---|---|
-| `2501.12643#root1` | `document` | `Tensor cross interpolation approach for quantum impurity problems based on the weak-coupling expansion` |
-| `2501.12643#s1` | `sentence` | `We apply the tensor cross interpolation (TCI) algorithm to solve equilibrium quantum impurity problems with high precisi...` |
-| `2501.12643#h1` | `section` | `Introduction` |
-| `2501.12643#s7` | `sentence` | `Solving quantum impurity problems is a fundamental issue in condensed matter physics.` |
-
-Các câu tóm tắt (`s1`–`s6`) được gắn trực tiếp dưới nút gốc `root1`, còn các câu trong phần thân (`s7`, `s8`, ...) nằm dưới mục `h1` (`Introduction`); các công thức khối (`2501.12643#eq1`, `eq2`, ...) được gắn tương ứng dưới từng mục (`h3`, `h6`, `h7`, `h8`).
-
-### 5.3. Biểu đồ phân tích cấu trúc cây
-
-![Phân bố loại phần tử trong bảng elements](../figures/m2-hierarchy-elements.svg)
-
-![Trạng thái phiên bản và phân bố số cạnh hierarchy trên mỗi bài báo](../figures/m2-hierarchy-versions.svg)
+1. **Chặn trùng khóa trong cùng phiên bản (`ambiguous` / `duplicate_key_different_reference`):** Nếu cùng một `citation_key` xuất hiện nhiều lần trong cùng một phiên bản nhưng khác DOI hoặc khác tiêu đề chuẩn hóa, hệ thống không gộp theo khóa và không thực hiện đổi tên `\cite{}` cho khóa nhập nhằng đó.
+2. **Bất biến DOI (`doi != candidate_doi`):** Hai mục có DOI khác nhau tuyệt đối không được gộp chung kể cả khi tiêu đề gần giống; bản ghi không có DOI không được dùng làm cầu nối giữa hai DOI xung đột.
+3. **Kiểm tra độ tin cậy tiêu đề (`is_reliable_title`):** Chỉ cho phép dùng `title:` làm khóa định danh gộp khi tiêu đề đạt độ tin cậy, tránh gộp nhầm các tiêu đề ngắn hoặc chung chung.
+4. **Hợp nhất đơn trị (`len(candidates) == 1`):** Chỉ thực hiện hợp nhất trường (hợp danh sách tác giả không trùng, điền bổ sung `year`/`doi`/`journal`/`url`) khi chỉ có **duy nhất một** mục chuẩn ứng viên khớp; nếu có nhiều ứng viên cạnh tranh thì giữ tách biệt thành mục mới.
 
 ---
 
-## 6. Tài liệu tham khảo
+## 6. Kết quả thực nghiệm toàn nhóm (25.000 bài báo)
+
+Từ dữ liệu hợp nhất `m2_unified_summary.json` trên toàn bộ **25.000 bài báo** (`40.896` phiên bản khai báo), công đoạn phân tích cú pháp phân cấp đạt:
+
+| Chỉ số toàn nhóm | Giá trị | Ghi chú |
+|---|---:|---|
+| Số bài báo dựng được cây | **22.961** (`91,84%`) | `2.039` bài rỗng hoàn toàn (`8,16%`) |
+| Số phiên bản dựng được cây | **37.967 / 40.896** (`92,84%`) | Trung bình `426,3` cạnh/phiên bản có cây |
+| Phần tử duy nhất (`elements`) | **11.098.189** | Giảm `31,59%` từ `16.223.222` phần tử thô |
+| Tổng số cạnh cha–con (`hierarchy`) | **16.185.255** | Kết nối toàn bộ 11 loại nút `ElementKind` |
+| Tổng mục `bibtex` sau hợp nhất | **975.674** | Trên `19.204` bài có thư mục tham khảo |
+
+Riêng trên dải của **Mẫn Nhi** (`2501.12642` – `2501.17641`): `4.544` bài dựng được cây (`90,88%`), `456` bài rỗng, `7.592 / 8.251` phiên bản có cây (`92,01%`), `2.221.136` phần tử duy nhất (giảm `32,22%` từ `3.276.789`), `3.269.197` cạnh `hierarchy`, và `195.360` mục `bibtex` trên `3.819` bài.
+
+```{code-cell} python
+:tags: [remove-input]
+import sys
+from pathlib import Path
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
+
+root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / "myst.yml").exists())
+if str(root) not in sys.path:
+    sys.path.insert(0, str(root))
+
+from book.lib import unified
+
+m2 = unified.load_json("m2_unified_summary")
+kinds = m2["element_kind_distribution"]
+k_labels = list(kinds.keys())
+k_vals = [kinds[k] for k in k_labels]
+
+owners = ["huynh-nhi", "man-nhi", "hoang", "trong", "khang"]
+v_rate = [round(m2["by_owner"][o]["parsed_version_rate"] * 100, 2) for o in owners]
+edges = [m2["by_owner"][o]["hierarchy_edges"] for o in owners]
+
+fig = make_subplots(
+    rows=1, cols=2,
+    subplot_titles=(
+        f"Phân bố 11 loại nút elements ({m2['total_unique_elements']:,} nút)",
+        f"Số cạnh hierarchy & tỷ lệ phiên bản có cây ({m2['total_hierarchy_edges']:,} cạnh)",
+    ),
+)
+fig.add_trace(
+    go.Bar(name="elements", x=k_labels, y=k_vals, marker_color="#2563eb", text=[f"{v:,}" for v in k_vals], textposition="outside"),
+    row=1, col=1,
+)
+fig.add_trace(
+    go.Bar(name="Cạnh hierarchy", x=owners, y=edges, marker_color="#0ea5e9", text=[f"{v/1e6:.2f}M" for v in edges], textposition="outside"),
+    row=1, col=2,
+)
+fig.update_yaxes(type="log", title_text="Số lượng (thang log)", row=1, col=1)
+fig.update_yaxes(title_text="Số cạnh hierarchy", row=1, col=2)
+fig.update_xaxes(tickangle=-25, row=1, col=1)
+fig.update_layout(
+    title="Kết quả phân tích cú pháp phân cấp toàn nhóm (25.000 bài)",
+    showlegend=False,
+    template="plotly_white",
+)
+unified.render_plotly(fig, height=420)
+```
+
+---
+
+## 7. Tài liệu tham khảo
 
 - Đề bài Milestone 2: [Parsing Statement](https://hcmus-cs-ta.github.io/lab-book/intro-ds/statement/parsing)
-- Mã nguồn `arxiv_pipeline.gathering` (`root_finder.py`, `expander.py`, `service.py`, `latex_scan.py`) và `arxiv_pipeline.hierarchy` (`builder.py`, `stack.py`, `leaf_parser.py`, `latex_utils.py`, `validation.py`).
+- Mã nguồn `arxiv_pipeline.gathering` (`root_finder.py`, `expander.py`, `service.py`, `latex_scan.py`), `arxiv_pipeline.hierarchy` (`builder.py`, `stack.py`, `leaf_parser.py`, `latex_utils.py`, `validation.py`), và `arxiv_pipeline.bibtex` (`parser.py`, `deduplicator.py`, `service.py`).

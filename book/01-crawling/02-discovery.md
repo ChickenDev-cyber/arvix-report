@@ -1,3 +1,8 @@
+---
+kernelspec:
+  name: python3
+  display_name: Python 3
+---
 # 1.2 Khám phá bài báo (discovery)
 
 > **Người phụ trách:** Mẫn Nhi (`@NhiNgo49`)  
@@ -83,16 +88,40 @@ Trong repository hiện tại, Discovery thực tế dùng **arXiv Atom API**. O
 
 ## 6. Dữ liệu và biểu đồ từ run thật
 
-Script `scripts/prepare_mannhi.py` trích xuất toàn bộ kết quả Discovery từ `m1-colab-man-nhi-01/corpus/runs/m1-colab-man-nhi-01/accepted_results.jsonl` (`is_mock=false`) vào `data/mannhi/discovery.csv`. Kết quả thực nghiệm trên dải phân công của Mẫn Nhi (`2501.12642` – `2501.17641`):
+Từ dữ liệu hợp nhất `m1_final_corpus.json`, toàn nhóm đã rà soát tổng cộng **179.012 ID ứng viên** để thu được đúng **25.000 bài báo hợp lệ** (5.000 bài/thành viên). Hai dải bắc ngang ranh giới tháng (`trong`: `2504.17523–2505.00665` quét `83.142` ID; `khang`: `2506.20788–2507.01658` quét `80.870` ID) phải quét cạn tới `99999` của tháng đầu trước khi chuyển tháng mới, trong khi 3 dải nội tháng (`hoang`, `man-nhi`, `huynh-nhi`) quét đúng `5.000` ID.
 
-| Chỉ số | Giá trị | Ghi chú |
-|---|---:|---|
-| Số ID ứng viên (`candidate_count`) | 5.000 | Dải nội tháng `2025-01`, `inclusive=true` |
-| Số ID đã kiểm tra (`candidates_checked`) | 5.000 | Chia 50 batch (tối đa 100 ID/batch) |
-| Bài tìm thấy (`found`) | 5.000 | Tỷ lệ 100,00% |
-| Bài bị loại (`excluded_ids`) | 0 | Không có ID vắng mặt trong feed |
-| Bài chưa xác minh (`unresolved_ids`) | 0 | Toàn bộ feed hợp lệ và đầy đủ |
-| Thời gian thực thi | 168,71 giây | Trung bình ~3,37 giây/batch (bao gồm khoảng nghỉ 3 giây) |
+Riêng dải của Mẫn Nhi (`2501.12642` – `2501.17641`):
+- Số ID ứng viên đã kiểm tra: `5.000 / 5.000` (chia 50 batch, `0` `excluded_ids`, `0` `unresolved_ids`).
+- Thời gian thực thi Discovery: `168,5` giây trong đợt chạy S2-Batch (`m1_batch_summary.json`).
 
-![Trạng thái xử lý Discovery](../figures/discovery-status.svg)
+```{code-cell} python
+:tags: [remove-input]
+import sys
+from pathlib import Path
+import plotly.graph_objects as go
+
+root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / "myst.yml").exists())
+if str(root) not in sys.path:
+    sys.path.insert(0, str(root))
+
+from book.lib import unified
+
+m1 = unified.load_json("m1_final_corpus")
+owners = ["huynh-nhi", "man-nhi", "hoang", "trong", "khang"]
+candidates = [m1["by_owner"][o]["range"]["discovery_candidates"] for o in owners]
+found = [m1["by_owner"][o]["papers"] for o in owners]
+
+fig = go.Figure(data=[
+    go.Bar(name="ID ứng viên đã quét", x=owners, y=candidates, marker_color="#94a3b8", text=[f"{v:,}" for v in candidates], textposition="outside"),
+    go.Bar(name="Bài hợp lệ tìm thấy", x=owners, y=found, marker_color="#2563eb", text=[f"{v:,}" for v in found], textposition="outside"),
+])
+fig.update_layout(
+    title=f"Discovery toàn nhóm: {m1['total_discovery_candidates']:,} ứng viên → {m1['total_papers']:,} bài báo",
+    yaxis_type="log",
+    yaxis_title="Số lượng ID (thang log)",
+    barmode="group",
+    template="plotly_white",
+)
+unified.render_plotly(fig, height=380)
+```
 

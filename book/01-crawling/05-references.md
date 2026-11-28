@@ -1,3 +1,8 @@
+---
+kernelspec:
+  name: python3
+  display_name: Python 3
+---
 # 1.5 Thu thập tài liệu tham khảo (References)
 
 
@@ -50,7 +55,7 @@ Các bản ghi trùng được gộp theo ID arXiv chuẩn. Với từng trườ
 
 ### 3.3. Bổ sung ngày nộp
 
-Các ID arXiv sau chuẩn hóa được chia batch tối đa 100 ID để tra `published` từ arXiv Atom API. Ngày chỉ được chấp nhận nếu thuộc batch được yêu cầu và có định dạng ISO hợp lệ: ngày `YYYY-MM-DD` hoặc timestamp có múi giờ. Giá trị không hợp lệ được xem là thiếu và xuất hiện trong `missing_fields`.
+Các ID arXiv sau chuẩn hóa được **khử trùng lặp toàn cục** rồi chia batch tối đa 100 ID để tra `published` từ arXiv Atom API. Ngày chỉ được chấp nhận nếu thuộc batch được yêu cầu và có định dạng ISO hợp lệ: ngày `YYYY-MM-DD` hoặc timestamp có múi giờ. Giá trị không hợp lệ được xem là thiếu và xuất hiện trong `missing_fields`.
 
 ### 3.4. Trường dữ liệu và metrics
 
@@ -87,6 +92,8 @@ Lưu ý: `empty` không chứng minh bài báo không trích dẫn tài liệu n
 
 Client Semantic Scholar mặc định chờ 1 giây giữa các request, timeout 30 giây và tối đa 3 lần gửi cho một request. Client arXiv mặc định chờ ít nhất 3 giây. HTTP 429 được nhận diện là `rate_limited`; các lỗi server 500/502/503/504 và lỗi mạng có thể retry. `Retry-After` được đọc ở dạng số giây hoặc HTTP-date.
 
+Một lưu ý kỹ thuật quan trọng khi gửi khóa API tới Semantic Scholar: `urllib.request.Request` mặc định chuẩn hóa tên header theo kiểu Title-Case (`x-api-key` bị đổi thành `X-Api-Key`), có thể gây từ chối xác thực trên một số cổng kiểm tra header chữ thường. Do đó, client sử dụng `http.client.HTTPSConnection` để giữ nguyên header `x-api-key` viết thường trên kết nối HTTP/1.1 TLS.
+
 Nếu chạy qua runner, `RequestScheduler` có thể lưu lịch request và cooldown vào checkpoint store. Điều này giúp giữ deadline chờ qua lần restart thay vì gửi request quá sớm sau khi chương trình khởi động lại.
 
 ## 6. Resume và cache
@@ -100,26 +107,59 @@ T4 dùng chung hợp đồng `CheckpointStore` (`load(namespace, key)`, `save(re
 
 Key trang gồm owner, arXiv ID, page size và fields. Cache ngày dùng key `[arxiv_id]`; `run_id` được cô lập ở tầng store. Khi resume, `max_pages` chỉ đếm trang tải mới trong lượt hiện tại, nên chương trình có thể tiếp tục sau khi đã lưu 50 trang trước đó. Checkpoint sai schema hoặc sai identity phải báo lỗi rõ ràng, không được âm thầm xem như cache rỗng.
 
-## 7. Kết quả thực nghiệm từ run thật (`m1-colab-man-nhi-01`)
+## 7. Kết quả thực nghiệm toàn nhóm và riêng Mẫn Nhi
 
-Trong bản chạy thật `m1-colab-man-nhi-01` (`is_mock=false`) trên dải `2501.12642` – `2501.17641`, `prepare_mannhi.py` trích xuất được **4.994 bản ghi References** (toàn bộ đều có `data.complete=true`), với tổng hợp như sau:
+Từ dữ liệu hợp nhất `m1_final_corpus.json` (`25.000` bài báo), toàn nhóm thu thập được **466.763 trích dẫn arXiv duy nhất** trên **20.878 bài có trích dẫn** (`83,51%`), trong đó **465.709** mục đủ 4 trường metadata (`99,77%`).
 
-| Chỉ số | Giá trị | Ghi chú |
-|---|---:|---|
-| Số bài có kết quả References | 4.994 | Trên 5.000 bài của Mẫn Nhi (6 bài chưa có bản ghi references) |
-| Trạng thái `success` (có arXiv refs) | 3.538 | Chiếm **70,85%** số bài đã lấy |
-| Trạng thái `empty` (0 arXiv refs) | 1.456 | Chiếm **29,15%** (không có ID arXiv hợp lệ sau lọc) |
-| Tổng mục thô Semantic Scholar (`s2_reference_count`) | 172.483 | Giữ nguyên trước khi lọc/khử trùng |
-| Tổng arXiv ID duy nhất (`arxiv_reference_count`) | 78.635 | Chiếm 45,59% tổng mục thô từ S2 |
-| Số arXiv refs đủ 4 trường metadata | 78.635 | Đạt **100,00%** đầy đủ ngày nộp v1 |
+Riêng trên dải của Mẫn Nhi (`2501.12642` – `2501.17641`):
+- Số bài có trích dẫn arXiv (`citing_papers_with_refs`): **3.538 / 5.000** (`70,76%`).
+- Tổng số arXiv references duy nhất: **78.635** (trung bình `15,75` refs/bài trên toàn bộ các bài đã lấy), đạt **100,00%** (`78.635 / 78.635`) đủ metadata ngày nộp v1.
+- Trong đợt chạy S2-Batch (`m1_batch_summary.json`): `3.545` bài `success`, `1.450` bài `empty` (tổng `4.995` bài hoàn tất truy vấn = `99,90%`).
 
-Trong nhóm 3.538 bài `success`, số arXiv references trên mỗi bài dao động từ **1** đến **252** (trung vị **16**, trung bình **22,23**, phân vị 95% là **66**).
+## 8. Biểu đồ tương tác từ dữ liệu thật
 
-## 8. Biểu đồ từ dữ liệu thật
+```{code-cell} python
+:tags: [remove-input]
+import sys
+from pathlib import Path
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
-Hai biểu đồ dưới đây được sinh tự động bởi `book/lib/mannhi_charts.py` từ `data/mannhi/references_per_paper.csv` (đã lọc chỉ giữ 4.994 dòng `is_mock=False`):
+root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / "myst.yml").exists())
+if str(root) not in sys.path:
+    sys.path.insert(0, str(root))
 
-![Số reference arXiv trên mỗi bài](../figures/references-count.svg)
+from book.lib import unified
 
-![Trạng thái thu thập references](../figures/references-status.svg)
+m1 = unified.load_json("m1_final_corpus")
+m1_batch = unified.load_json("m1_batch_summary")
+
+owners = ["huynh-nhi", "man-nhi", "hoang", "trong", "khang"]
+refs_arxiv = [m1["by_owner"][o]["arxiv_references"] for o in owners]
+refs_complete = [m1["by_owner"][o]["ref_metadata_complete"] for o in owners]
+
+mn_steps = m1_batch["by_owner"]["man-nhi"]["steps"]
+mn_labels = ["success", "empty", "partial", "failed", "not_found"]
+mn_vals = [mn_steps.get(f"references|{k}", 0) for k in mn_labels]
+
+fig = make_subplots(
+    rows=1, cols=2,
+    subplot_titles=(
+        f"arXiv references toàn nhóm ({m1['total_arxiv_references']:,})",
+        "Trạng thái References của Mẫn Nhi (S2-Batch)",
+    ),
+)
+fig.add_trace(go.Bar(name="Tổng arXiv refs", x=owners, y=refs_arxiv, marker_color="#0ea5e9"), row=1, col=1)
+fig.add_trace(go.Bar(name="Đủ metadata v1", x=owners, y=refs_complete, marker_color="#16a34a"), row=1, col=1)
+fig.add_trace(
+    go.Bar(name="man-nhi", x=mn_labels, y=mn_vals, marker_color=["#16a34a", "#64748b", "#f59e0b", "#ef4444", "#dc2626"], text=[f"{v:,}" for v in mn_vals], textposition="outside"),
+    row=1, col=2,
+)
+fig.update_layout(
+    title="Kết quả thu thập References & độ phủ metadata arXiv v1",
+    barmode="group",
+    template="plotly_white",
+)
+unified.render_plotly(fig, height=390)
+```
 

@@ -1,3 +1,8 @@
+---
+kernelspec:
+  name: python3
+  display_name: Python 3
+---
 # 1.1 Tổng quan và kiến trúc pipeline
 
 > **Người phụ trách:** Mẫn Nhi (`@NhiNgo49`)  
@@ -81,7 +86,7 @@ Số liệu trong báo cáo phải gắn với `run_id`, owner và cờ `is_mock
 
 ## 7. Kết quả dữ liệu thật toàn nhóm (25.000 bài báo)
 
-Bảng dưới đây tổng hợp kết quả dữ liệu Milestone 1 cuối cùng của cả 5 thành viên (tổng nguồn từ `data/mannhi/m1_final_25k_summary.json`, `is_mock=false`), phản ánh đầy đủ phạm vi **25.000 bài báo** và **40.896 phiên bản** (trung bình `1,636` phiên bản/bài; `42,64%` bài có $\ge 2$ phiên bản):
+Bảng dưới đây tổng hợp kết quả dữ liệu Milestone 1 cuối cùng của cả 5 thành viên từ `data/unified/m1_final_corpus.json` (`40.896` phiên bản khai báo, trung bình `1,636` phiên bản/bài; `42,64%` bài có $\ge 2$ phiên bản):
 
 | Owner | Dải ID | Số bài | Phiên bản khai báo | Bài có venue | Bài có arXiv refs | Tổng arXiv refs | Refs đủ metadata |
 |---|---|---:|---:|---:|---:|---:|---:|
@@ -92,15 +97,53 @@ Bảng dưới đây tổng hợp kết quả dữ liệu Milestone 1 cuối cù
 | `trong` | `2504.17523` – `2505.00665` | 5.000 | 8.060 | 819 (16,38%) | 4.325 (86,50%) | 91.814 | 91.750 (99,93%) |
 | **Toàn nhóm** | **5 dải** | **25.000** | **40.896** | **4.284 (17,14%)** | **20.878 (83,51%)** | **466.763** | **465.709 (99,77%)** |
 
-### 7.1. Ghi nhận riêng trên tập `m1-colab-man-nhi-01`
+```{code-cell} python
+:tags: [remove-input]
+import sys
+from pathlib import Path
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 
-Trên bản chạy thật `m1-colab-man-nhi-01` (`is_mock=false`), các công đoạn của Mẫn Nhi đạt:
-- **Discovery:** `5.000/5.000` bài `found` (`0` `excluded`, `0` `unresolved`) trong `168,71` giây.
-- **Metadata:** `5.000` bản ghi (`4.998` `success`, `2` `partial`).
-- **Sources:** `8.199` phiên bản đã xử lý (`7.590` `success`, `609` `unsupported` không có TeX).
-- **References:** `4.994` bài có kết quả (`3.538` `success`, `1.456` `empty`, đều có `complete=true`), thu được `78.635` arXiv references với `100%` đủ metadata ngày nộp.
+root = next(p for p in [Path.cwd(), *Path.cwd().parents] if (p / "myst.yml").exists())
+if str(root) not in sys.path:
+    sys.path.insert(0, str(root))
+
+from book.lib import unified
+
+m1 = unified.load_json("m1_final_corpus")
+m1_batch = unified.load_json("m1_batch_summary")
+
+owners = ["hoang", "huynh-nhi", "khang", "man-nhi", "trong"]
+versions = [m1["by_owner"][o]["declared_versions"] for o in owners]
+refs_total = [m1["by_owner"][o]["arxiv_references"] for o in owners]
+wall_hours = [m1_batch["by_owner"][o]["active_wall_hours"] for o in owners]
+
+fig = make_subplots(
+    rows=1, cols=2,
+    subplot_titles=("Phiên bản khai báo & arXiv references", "Thời gian chạy S2-Batch (giờ)"),
+)
+fig.add_trace(go.Bar(name="Phiên bản khai báo", x=owners, y=versions, marker_color="#0ea5e9"), row=1, col=1)
+fig.add_trace(go.Bar(name="arXiv references", x=owners, y=refs_total, marker_color="#2563eb"), row=1, col=1)
+fig.add_trace(
+    go.Bar(name="Active wall (h)", x=owners, y=wall_hours, marker_color="#10b981", text=[f"{h:.2f}h" for h in wall_hours], textposition="outside"),
+    row=1, col=2,
+)
+fig.update_layout(
+    title="Tổng hợp kết quả Milestone 1 toàn nhóm (25.000 bài báo)",
+    barmode="group",
+    template="plotly_white",
+)
+unified.render_plotly(fig, height=380)
+```
+
+### 7.1. Kết quả đợt chạy S2-Batch (`m1_batch_summary.json`)
+
+Trên đợt chạy chuẩn hóa toàn nhóm dùng Semantic Scholar POST batch:
+- **Thời gian thực thi hoạt động:** `16,57` – `22,77` giờ/thành viên (giảm `31,69%` – `47,72%` so với mốc `26,02` – `35,48` giờ ngày 06/11).
+- **Tổng lượt gọi HTTP được kiểm toán:** `74.323` lượt trên toàn nhóm (`14.470` – `15.109` lượt/người).
+- **Tỷ lệ hoàn tất bài theo quy ước bài tập:** `24.732 / 25.000` bài (`98,93%`), trong đó `man-nhi` đạt `4.951 / 5.000` (`99,02%`) trong `20,71` giờ.
 
 ### 7.2. Lưu ý về phạm vi benchmark
 
-Các bản ghi benchmark chụp ở giai đoạn trung gian (ngày 06/11/2026) có `cache_mode=mixed` và `exit_code=2` trước khi hoàn tất đợt chạy bù cuối cùng cho một số dải. Do đó, số đo hiệu năng trung gian không dùng để thay thế kết quả toàn dải cuối cùng ở bảng trên.
+Các bản ghi benchmark chụp ở giai đoạn trung gian (ngày 06/11/2026) chỉ dùng làm mốc đối chiếu trước tối ưu; mọi đánh giá sản lượng dữ liệu cuối cùng của Milestone 1 đều căn cứ vào `m1_final_corpus.json` và `m1_batch_summary.json`.
 

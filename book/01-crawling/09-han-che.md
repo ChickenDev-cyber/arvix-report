@@ -22,22 +22,17 @@ T1 Discovery hỗ trợ checkpoint theo batch khi được runner truyền store
 
 T4 References lưu checkpoint sau mỗi trang hợp lệ, cache ngày nộp arXiv và lịch chờ API. Khi khởi động lại cùng run, module đọc các trang đã lưu và tiếp tục từ offset tiếp theo. Nếu checkpoint bị hỏng hoặc không khớp owner/ID/page size/fields, module báo lỗi thay vì bỏ qua dữ liệu lỗi.
 
-## 3. Hướng cải tiến
+## 3. Hướng cải tiến và tối ưu đã áp dụng
 
-- Theo dõi tỷ lệ `unresolved`, `partial`, `failed` theo nguồn và theo run để xác định công đoạn thường bị gián đoạn.
-- Lưu lại `run_id`, commit code, cấu hình dải, môi trường và cache mode cùng báo cáo benchmark để có thể tái lập.
-- Chạy lại các task có lỗi retryable sau thời gian chờ phù hợp; không retry lỗi dữ liệu không hợp lệ hoặc ID sai.
-- So sánh số lượng `raw_references`, `arxiv_reference_count` và `complete_reference_count` để thấy rõ phần dữ liệu bị loại hoặc thiếu metadata.
-- Chỉ kết luận về hiệu năng toàn dải sau khi có run thật, đầy đủ phạm vi và benchmark đúng môi trường yêu cầu.
+- **Dò biên tháng theo tìm kiếm nhị phân $O(\log K)$:** Với các dải ID xuyên ranh giới tháng (`trong` quét `83.142` ID, `khang` quét `80.870` ID), việc quét tuyến tính $O(K)$ toàn bộ phần cuối tháng gây lãng phí hàng nghìn request. Chuyển sang dò tìm biên cuối tháng theo thuật toán tìm kiếm nhị phân $O(\log K)$ giúp giảm mạnh số lượt gọi Atom API.
+- **Chuyển sang Semantic Scholar POST batch (`S2 POST batch`):** Thay cho truy vấn đơn lẻ, cơ chế gọi lô giúp giảm thời gian chạy toàn bộ 5.000 bài/người xuống còn **`16,57` – `22,77` giờ** (giảm **`31,69%` – `47,72%`** so với mốc `26,02` – `35,48` giờ ngày 06/11), tổng `74.323` lượt gọi HTTP và hoàn tất `24.732 / 25.000` bài (`98,93%`).
+- **Tối ưu retry và kiểm toán:** Theo dõi tỷ lệ `unresolved`, `partial`, `failed` theo nguồn và theo run; chỉ chạy lại các task có lỗi retryable sau thời gian chờ phù hợp, không retry lỗi dữ liệu không hợp lệ hoặc ID sai.
 
-## 4. Tình trạng xác nhận trên dữ liệu thật của Mẫn Nhi
+## 4. Tình trạng xác nhận trên dữ liệu thật (25.000 bài)
 
-Trên bản chạy thật `m1-colab-man-nhi-01` (`is_mock=false`), các kết quả đã được xác nhận trong `accepted_results.jsonl` gồm:
-
-- **Discovery:** Hoàn tất `5.000/5.000` ID (`0` `excluded`, `0` `unresolved`).
-- **Metadata:** `5.000` bài (`4.998` `success`, `2` `partial`).
-- **Sources:** `8.199` phiên bản (`7.590` `success`, `609` `unsupported` không có mã nguồn TeX).
-- **References:** `4.994` bài hoàn tất phân trang (`3.538` `success`, `1.456` `empty`, `78.635` arXiv ID duy nhất đạt `100%` metadata), còn `6` bài chưa có bản ghi `references`.
+Trên dữ liệu hợp nhất cuối cùng (`m1_final_corpus.json` và `m1_batch_summary.json`):
+- **Toàn nhóm (25.000 bài):** Discovery hoàn tất `179.012` ứng viên $\rightarrow$ `25.000` bài; `40.896` phiên bản khai báo; `466.763` arXiv references (`99,77%` đủ metadata).
+- **Riêng dải Mẫn Nhi (`man-nhi`):** `5.000/5.000` bài Discovery; `4.951/5.000` bài hoàn tất theo quy ước bài tập (`99,02%`); `4.995` bài hoàn tất truy vấn References (`78.771` arXiv refs trong `m1_batch_summary.json`, `78.635` arXiv refs xuất sang Parquet cuối với `100%` đủ metadata).
 
 *(Lưu ý: các file `statistics/baseline-001.json` và `benchmarks/baseline-001.json` trong thư mục gốc của repo code vẫn giữ `is_mock=true` để phục vụ kiểm thử tự động và không được trộn vào kết quả thực nghiệm.)*
 

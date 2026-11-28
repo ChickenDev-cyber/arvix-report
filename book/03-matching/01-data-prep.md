@@ -120,7 +120,7 @@ fig.update_layout(barmode="stack", yaxis_title="Số bài", margin=dict(t=30, b=
 unified.render_plotly(fig, height=340)
 ```
 
-Các số này khớp với thống kê ở Chương 2: trên 25,000 bài, 19,204 bài có BibTeX (`total_papers_with_bibtex`), còn 2,558 bài không có danh mục tham khảo nào và 3,182 bài chỉ có `.bbl` đã bị lọc ở bước tải nguồn (mục 1.4), nên các bài này không có dòng dự đoán.
+Các số này khớp với thống kê ở Chương 2: trên 25,000 bài, 19,204 bài có BibTeX (`total_papers_with_bibtex`), còn 2,558 bài không có danh mục tham khảo nào và 3,182 bài chỉ có `.bbl` đã bị lọc ở bước tải nguồn (mục 1.4), nên những bài thuộc hai nhóm này không có dòng dự đoán.
 
 ## 5. Kết quả kiểm tra và bàn giao
 
